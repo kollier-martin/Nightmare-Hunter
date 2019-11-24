@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Grog : EnemyP
 {
+    [SerializeField] private GameObject platform;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Slider health;
     [SerializeField] private GameObject portal;

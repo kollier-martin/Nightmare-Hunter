@@ -21,6 +21,7 @@ public class Sniper : IGun
     // Update is called once per frame
     void Update()
     {
+        Aim();
         Shoot(3.0f);
     }
 }

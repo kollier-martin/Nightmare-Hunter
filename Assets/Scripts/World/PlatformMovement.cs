@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlatformMovement : MonoBehaviour
 {
+    public float MaxX, MaxY, MinX, MinY;
     readonly float moveSpeed = 2.5f;
     bool moveY = true;
     bool moveX = true;
@@ -11,11 +12,11 @@ public class PlatformMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       if (name == "PX")
+       if (name.Contains("PX"))
        {
             MoveX();
        }
-       else if (name == "PY")
+       else if (name.Contains("PY"))
        {
             MoveY();
        }
@@ -23,12 +24,12 @@ public class PlatformMovement : MonoBehaviour
 
     void MoveX()
     {
-        if (transform.position.x > 20f)
+        if (transform.position.x > MaxX)
         {
             moveX = false;
         }
 
-        if (transform.position.x < 10f)
+        if (transform.position.x < MinX)
         {
             moveX = true;
         }
@@ -46,12 +47,12 @@ public class PlatformMovement : MonoBehaviour
 
     void MoveY()
     {
-        if (transform.position.y > 3f)
+        if (transform.position.y > MaxY)
         {
             moveY = false;
         }
 
-        if (transform.position.y < -1f)
+        if (transform.position.y < MinY)
         {
             moveY = true;
         }

@@ -28,9 +28,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 943388831392113895}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.7582, y: 0.0556, z: 2}
-  m_LocalScale: {x: 5.620782, y: 5.620782, z: 5.620782}
+  m_LocalScale: {x: 4.294277, y: 4.294277, z: 4.294277}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -869744931
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 9069858688913064438, guid: 0e4322636ba9eec41af43eed9b47cc4a,
     type: 3}
@@ -116,15 +116,15 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.28579766
+  m_Mass: 0.16681893
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  m_CollisionDetection: 1
+  m_Constraints: 7
 --- !u!58 &943388831392114456
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -153,7 +153,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851331a41b7cc1e41b3dc4dba836f869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platform: {fileID: 0}
+  DeathEffect: {fileID: 4414235328577738730, guid: 1b683720769552644aa248db514d6084,
+    type: 3}
   targetToHit: {fileID: 7355971980563832937, guid: 270aaffc840225f4dac22036740a48e8,
     type: 3}
+  MaxXPos: 0
+  MinXPos: 0
+  SP: {fileID: 943388831392114461}
   myHealth: 0

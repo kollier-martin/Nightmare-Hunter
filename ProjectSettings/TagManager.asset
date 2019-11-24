@@ -14,6 +14,13 @@ TagManager:
   - Platform
   - Bullet
   - Moving Platform
+  - Chest
+  - Pop Up
+  - Key
+  - Crusher
+  - Dead
+  - Boss Spawn
+  - BossCamera
   layers:
   - Default
   - TransparentFX
@@ -25,7 +32,7 @@ TagManager:
   - 
   - Ground
   - Ladders
-  - 
+  - Interactable
   - 
   - 
   - 
@@ -54,8 +61,14 @@ TagManager:
   - name: BG
     uniqueID: 2809872687
     locked: 0
+  - name: Water
+    uniqueID: 3632414099
+    locked: 0
   - name: Platform
     uniqueID: 120781331
+    locked: 0
+  - name: Ground
+    uniqueID: 3944828475
     locked: 0
   - name: Sprite
     uniqueID: 3425222365

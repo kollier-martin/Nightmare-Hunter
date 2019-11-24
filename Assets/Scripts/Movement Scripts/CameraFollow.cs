@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CameraFollow : MonoBehaviour
+public class CameraFollow : MonoBehaviour, IEventSystemHandler
 {
     private Vector2 velocity;
+    public Animator camAnim;
 
     public GameObject player;
 
@@ -16,10 +18,9 @@ public class CameraFollow : MonoBehaviour
     public Vector3 minCameraPos;
     public Vector3 maxCameraPos;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-
+        camAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -37,5 +38,10 @@ public class CameraFollow : MonoBehaviour
                                              Mathf.Clamp(transform.position.y, minCameraPos.y, maxCameraPos.y),
                                              Mathf.Clamp(transform.position.z, minCameraPos.z, maxCameraPos.z));
         }
+    }
+
+    public void Shake()
+    {
+        camAnim.SetTrigger("Shake");
     }
 }

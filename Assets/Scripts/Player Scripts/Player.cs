@@ -8,59 +8,134 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, MessageSystem
 {
-    public Slider health;
+    public GameObject mainCam;
+    public GameObject bossCam;
 
-    private Rigidbody2D rb;
+    private Slider health;
+    private bool dead = false;
+    int i = 0;
+
     private Animator anim;
+    private Rigidbody2D rb;
 
     private GameObject GameSpawn;
+    private SpriteRenderer CanInteractSR;
+    private SpriteRenderer PlayerGotSR;
+    private Animator PlayerGotAnim;
+    private GameController CurrentController;
+
+    [SerializeField] private ParticleSystem DeathParticle;
+    [SerializeField] private GameObject PlayerGot;
+    [SerializeField] private GameObject CanInteract;
     [SerializeField] private GameObject Gun;
-    [SerializeField] private GameObject[] GunsOwned;
+    [SerializeField] private List<GameObject> GunsOwned;
+    [SerializeField] private List<GameObject> ItemInventory;
 
     public PlayerController myController;
 
-    float horizontal = 0f;
-    public int speed = 10;
-    bool jump = false;
+    private bool HasKey = false;
+    private float horizontal = 0f;
+    private const int speed = 15;
+    private bool jump = false;
+
     [SerializeField] bool climb;
+    public bool onPortal = false;
 
-    const float positionAdd = 0.20f;
+    private const float positionAdd = 0.20f;
+    public static Vector2 OriginalScale;
 
-    public float myHealth = 100.0f;
+    public static float myHealth = 100.0f;
+    public static string myName = "Seji";
 
     private int CurrentGunIndex = 0;
+    public bool bossIsDead = false;
+    private bool UnderBlock = false;
 
-    [SerializeField] private bool dead = false;
+    void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
+    {
+        bossIsDead = false;
+    }
 
     private void Awake()
     {
+        SceneManager.sceneLoaded += this.OnLoadCallback;
+
+        CurrentController = FindObjectOfType<GameController>();
+
         GameSpawn = GameObject.FindGameObjectWithTag("Respawn");
+
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+
+        CanInteractSR = CanInteract.GetComponent<SpriteRenderer>();
+        PlayerGotSR = PlayerGot.GetComponent<SpriteRenderer>();
+        PlayerGotAnim = PlayerGot.GetComponent<Animator>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Gun = Instantiate(Gun, new Vector3(transform.position.x + positionAdd, transform.position.y, transform.position.z - .25f), transform.rotation, transform.parent);
-        Gun.transform.parent = transform;
+        try
+        {
+            Gun = Instantiate(Gun, new Vector3(transform.position.x + positionAdd, transform.position.y, transform.position.z), transform.rotation, transform);
+        }
+        catch (System.Exception)
+        {
 
-        anim = GetComponent<Animator>();
+        }
+
+        OriginalScale = transform.localScale;
         DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal") * speed;
-
+        
         if (Input.GetButtonDown("Jump"))
         {
+            anim.SetFloat("Jump", 1);
             jump = true;
         }
-        
-        health.value = myHealth / 100;
-        
+        else if (Input.GetButtonUp("Jump"))
+        {
+            anim.SetFloat("Jump", 0);
+        }
+
+        foreach (GameObject item in ItemInventory)
+        {
+            if (item.name == "Key")
+            {
+                HasKey = true;
+            }
+        }
+
+        if (dead == true)
+        {
+            StartCoroutine(Death());
+            dead = false;
+        }
+
+        if (health != null)
+        {
+            health.value = myHealth / 100;
+        }
+
+        if (HasKey == true && Input.GetButtonDown("Open") && bossIsDead == true && i < 1 && onPortal == true)
+        {
+            ItemInventory.Remove(GameObject.FindWithTag("Key"));
+            HasKey = false;
+            ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.LoadNextScene());
+            i++;
+        }
+        else if (HasKey == true && Input.GetButtonDown("Open") && bossIsDead == false && i < 1 && onPortal == true)
+        {
+            StartFight();
+            i++;
+        }
+
         SwapGun();
-        AmIDead();
+        i = 0;
     }
 
     // Update is called once per frame
@@ -74,30 +149,36 @@ public class Player : MonoBehaviour, MessageSystem
     
     private void SwapGun()
     {
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetAxis("DPadX") == 1)
+        if(Time.timeScale == 1)
         {
-            if (CurrentGunIndex == (GunsOwned.Length - 1))
+            if (GunsOwned != null)
             {
-                CurrentGunIndex = 0;
-                Swap(CurrentGunIndex);
-            }
-            else
-            {
-                CurrentGunIndex += 1;
-                Swap(CurrentGunIndex);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Q) || Input.GetAxis("DPadX") == -1)
-        {
-            if (CurrentGunIndex == 0)
-            {
-                CurrentGunIndex = 4;
-                Swap(CurrentGunIndex);
-            }
-            else
-            {
-                CurrentGunIndex -= 1;
-                Swap(CurrentGunIndex);
+                if (Input.GetKeyDown(KeyCode.E) || Input.GetAxis("DPadX") == 1)
+                {
+                    if (CurrentGunIndex == (GunsOwned.Count - 1))
+                    {
+                        CurrentGunIndex = 0;
+                        Swap(CurrentGunIndex);
+                    }
+                    else
+                    {
+                        CurrentGunIndex += 1;
+                        Swap(CurrentGunIndex);
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.Q) || Input.GetAxis("DPadX") == -1)
+                {
+                    if (CurrentGunIndex == 0 && GunsOwned.Count > 1 && CurrentGunIndex < GunsOwned.Count)
+                    {
+                        CurrentGunIndex += 1;
+                        Swap(CurrentGunIndex);
+                    }
+                    else
+                    {
+                        CurrentGunIndex -= 0;
+                        Swap(CurrentGunIndex);
+                    }
+                }
             }
         }
     }
@@ -105,7 +186,7 @@ public class Player : MonoBehaviour, MessageSystem
     private void Swap(int index)
     {
         Destroy(Gun);
-        Gun = Instantiate(GunsOwned[index], new Vector3(transform.position.x + positionAdd, transform.position.y, transform.position.z - .25f), transform.rotation, transform.parent);
+        Gun = Instantiate(GunsOwned[index], new Vector3(transform.position.x + positionAdd, transform.position.y, transform.position.z), Quaternion.identity, transform.parent);
         Gun.transform.parent = transform;
     }
 
@@ -123,8 +204,14 @@ public class Player : MonoBehaviour, MessageSystem
                 break;
 
             case ("Moving Platform"):
-                rb.velocity *= collision.gameObject.GetComponent<Rigidbody2D>().velocity;
+                rb.velocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
                 break;
+        }
+
+        if (collision.gameObject.tag == "Crusher" && UnderBlock == true)
+        {
+            TakeDamage(15);
+            StartCoroutine(Smush());
         }
     }
 
@@ -132,67 +219,138 @@ public class Player : MonoBehaviour, MessageSystem
     {
         if (collision.gameObject.tag == "Moving Platform")
         {
-            transform.parent = null;
             DontDestroyOnLoad(gameObject);
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        switch (other.name)
+        switch (other.gameObject.tag)
         {
             case ("Ladders"):
                 climb = true;
                 jump = false;
                 break;
 
-            case ("Portal"):
-                Debug.Log("Loading Scene...");
-                ExecuteEvents.Execute<GameController>(FindObjectOfType<GameController>().gameObject, null, (x, y) => x.LoadNextScene());
+            case ("Crusher"):
+                UnderBlock = true;
                 break;
+
+
+            case ("Portal"):
+                onPortal = true;
+                break;
+        }
+
+        if (other.gameObject.layer == 10)
+        {
+            CanInteract.SetActive(true);
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.name == "Ladders")
+        switch (other.name)
         {
-            climb = false;
-            jump = true;
+            case ("Ladders"):
+                climb = false;
+                jump = true;
+                break;
+
+            case ("Falling Block"):
+                UnderBlock = false;
+                break;
+        }
+
+        if (other.gameObject.layer == 10)
+        {
+            CanInteract.SetActive(false);
         }
     }
 
-    public void DeadPlayer()
+    public void StartFight()
     {
-        Destroy(this);
+        var BossSpawn = GameObject.FindGameObjectWithTag("Boss Spawn");
+        SpawnHere(BossSpawn);
+
+        mainCam.SetActive(false);
+        bossCam.SetActive(true);
+
+        ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.InstantiateBoss());
     }
-    
-    private void AmIDead()
+
+    IEnumerator Death()
     {
-        if (myHealth <= 0)
-        {
-            dead = true;
-            anim.SetBool("Dead", true);
-        }
-        else if (myHealth > 0)
-        {
-            dead = false;
-        }
+        Gun.SetActive(false);
+        GetComponent<SpriteRenderer>().enabled = false;
+        DeathParticle.Play();
+        yield return new WaitForSeconds(1.5f);
+        tag = "Dead";
+    }
+
+    IEnumerator Smush()
+    {
+        // Makes the "y" scale smaller and stores the "x" scale before being hit
+        OriginalScale.x = transform.localScale.x;
+        OriginalScale.y -= 0.80f;
+        transform.localScale = OriginalScale;
+
+        yield return new WaitForSeconds(1.0f);
+
+        // Increase the "y" to it's original state and store the "x' before reverting back to normal
+        OriginalScale.x = transform.localScale.x;
+        OriginalScale.y += 0.80f;
+        transform.localScale = OriginalScale;
     }
 
     public void Die()
     {
         myHealth = 0;
+        SendData();
         dead = true;
     }
 
     public void SpawnHere(GameObject Spawn)
     {
-        transform.position = Spawn.transform.position;
+        transform.position = new Vector3(Spawn.transform.position.x, Spawn.transform.position.y, transform.position.z);
     }
 
     public void TakeDamage(int damage)
     {
         myHealth -= damage;
+    }
+
+    public void GetItem(GameObject Item)
+    {
+        if (Item.tag == "Gun")
+        {
+            GunsOwned.Add(Item);
+        }
+        else
+        {
+            ItemInventory.Add(Item);
+        }
+
+        StartCoroutine(DisplayItem(2.0f, Item));
+    }
+
+    IEnumerator DisplayItem(float TimeToDelay, GameObject Item)
+    {
+        PlayerGotSR.GetComponent<SpriteRenderer>().sprite = Item.GetComponent<SpriteRenderer>().sprite;
+
+        yield return new WaitForSeconds(TimeToDelay);
+
+        PlayerGotSR.GetComponent<SpriteRenderer>().sprite = null;
+    }
+
+    public void SendData()
+    {
+        // Send current data to GameController
+        ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.ProcessPlayerData(transform.position, GunsOwned, ItemInventory, SceneManager.GetActiveScene()));
+    }
+
+    public void DestroyMyself()
+    {
+        Destroy(gameObject);
     }
 }

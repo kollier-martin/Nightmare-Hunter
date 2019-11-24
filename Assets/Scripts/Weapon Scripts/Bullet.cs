@@ -7,12 +7,14 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private int damage;
     [SerializeField] private float speedX;
-    private readonly float speedY = 0f;
+    [SerializeField] private float speedY;
 
-    // Update is called once per frame
-    void FixedUpdate()
+    public GameObject DestroyEffect;
+    public Rigidbody2D rb;
+
+    private void Start()
     {
-         GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, speedY);
+        rb.velocity = transform.right * speedX;
 
         if (name == "Snub Bullet")
         {
@@ -26,22 +28,13 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        /* For shotgun handling
-         * if (collision.gameObject.tag == "Bullet")
-        {
-            Physics2D.IgnoreCollision(collision.collider, gameObject.GetComponent<Collision2D>().collider);
-        }
-        else*/
-
         if (collision.gameObject.tag == "Enemy")
         {
             ExecuteEvents.Execute<MessageSystem>(collision.gameObject, null, (x, y) => x.TakeDamage(damage));
-            Destroy(gameObject);
         }
-        else if(collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Boundary")
-        {
-            Destroy(gameObject);
-        }
+
+        Instantiate(DestroyEffect, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 
     public void setDamage(int newDamage)

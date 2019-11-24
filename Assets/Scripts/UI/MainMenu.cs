@@ -8,7 +8,7 @@ using System;
 
 public class MainMenu : MonoBehaviour
 {
-    private const float fadeTime = 1.0f;
+    private const float fadeTime = 2.0f;
     public TextMeshProUGUI[] MainMenuText;
 
     public GameObject loadingScreen;
@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame()
     {
-        StartCoroutine(LoadQuietly(SceneManager.GetActiveScene().buildIndex + 1));
+        StartCoroutine(Fade());
     }
 
     public void Continue()
@@ -39,26 +39,7 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    IEnumerator LoadQuietly(int sceneIndex) 
-    {
-        Fade();
-        yield return new WaitForSeconds(fadeTime);
-
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
-
-        loadingScreen.SetActive(true);
-
-        while (!operation.isDone)
-        {
-            float progress = Mathf.Clamp01(operation.progress / .9f);
-            
-            slider.value = progress;
-            progressText.text = progress * 100f + "%";
-            yield return null;
-        }
-    }
-
-    public void Fade()
+    IEnumerator Fade()
     {
         for (float i = 0; i <= 1;)
         {
@@ -72,5 +53,10 @@ public class MainMenu : MonoBehaviour
         {
             element.text = "";
         }
+
+        yield return new WaitForSeconds(fadeTime);
+
+        loadingScreen.SetActive(true);
     }
+
 }

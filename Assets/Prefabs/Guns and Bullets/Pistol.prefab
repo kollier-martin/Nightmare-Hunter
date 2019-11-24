@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1638679836212025500}
   - component: {fileID: 1638679836212025501}
   - component: {fileID: 1638679836212025499}
+  - component: {fileID: 4401277078802107820}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Gun
@@ -29,7 +30,7 @@ Transform:
   m_LocalPosition: {x: -4.711276, y: 0.16227856, z: 2.97}
   m_LocalScale: {x: 0.2179, y: 0.2179, z: 0.2179}
   m_Children:
-  - {fileID: 1916478751032846543}
+  - {fileID: 7876042303886412243}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -69,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -869744931
-  m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingLayer: 5
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 2c4f3217d612e964d867ef191f2403b5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -94,46 +95,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab0e176eb0978e4c9bfe358a7fe2a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunSound: {fileID: 3423613228876408409}
+  gunSound: {fileID: 4401277078802107820}
   bullet: {fileID: 2692175545517236416, guid: 773f8a1b95f367743a86f906760b42a0, type: 3}
---- !u!1 &2685716962998672141
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1916478751032846543}
-  - component: {fileID: 3423613228876408409}
-  m_Layer: 0
-  m_Name: GUN_FIRE-GoodSoundForYou-820112263
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1916478751032846543
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2685716962998672141}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1638679836212025500}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &3423613228876408409
+  FirePoint: {fileID: 7876042303886412243}
+--- !u!82 &4401277078802107820
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2685716962998672141}
+  m_GameObject: {fileID: 1638679836212025502}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4383080528186928512, guid: e158d89a65a128246bf64ef23cf1a2f1,
@@ -224,3 +195,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &6840666459732524923
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7876042303886412243}
+  m_Layer: 0
+  m_Name: Fire Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7876042303886412243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6840666459732524923}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.704, y: 0.239, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1638679836212025500}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

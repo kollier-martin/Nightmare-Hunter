@@ -1,19 +1,35 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class SpawnBoss : MonoBehaviour
+public class SpawnBoss : MonoBehaviour, IEventSystemHandler
 {
     public GameObject Boss;
     public GameObject Holder;
 
+    public void PlaceBoss()
+    {
+        // Marlo Handler
+        Instantiate(Boss, new Vector3(Holder.transform.position.x, Holder.transform.position.y, Holder.transform.position.z), Holder.transform.rotation, Holder.transform);
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player") 
+        // Grog Conditionals
+        if (collision.isTrigger && collision.tag == "Player" && Boss.name == "Grog") 
         {
-            // Start cutscene
             Instantiate(Boss, Holder.transform);
-            GetComponent<Collider2D>().enabled = false;
+
+            try
+            {
+                GetComponent<Collider2D>().enabled = false;
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }

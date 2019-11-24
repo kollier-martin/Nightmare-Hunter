@@ -1,7 +1,130 @@
 fileFormatVersion: 2
 guid: 48b4be2f541060e41bca19c2bdf43105
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -7644568141518116961
+    second: Vegetation Tileset 2_0
+  - first:
+      213: 687088663039036611
+    second: Vegetation Tileset 2_1
+  - first:
+      213: -6295395010185212580
+    second: Vegetation Tileset 2_2
+  - first:
+      213: 4974438691347034137
+    second: Vegetation Tileset 2_3
+  - first:
+      213: 1104227357110183374
+    second: Vegetation Tileset 2_4
+  - first:
+      213: -5649671145504508773
+    second: Vegetation Tileset 2_5
+  - first:
+      213: -7944271569136044426
+    second: Vegetation Tileset 2_6
+  - first:
+      213: -8860128954906175535
+    second: Vegetation Tileset 2_7
+  - first:
+      213: -1703752375036068164
+    second: Vegetation Tileset 2_8
+  - first:
+      213: -7931528840155858273
+    second: Vegetation Tileset 2_9
+  - first:
+      213: 7027144316590200245
+    second: Vegetation Tileset 2_10
+  - first:
+      213: 5761057815202077924
+    second: Vegetation Tileset 2_11
+  - first:
+      213: -3097597473033573242
+    second: Vegetation Tileset 2_12
+  - first:
+      213: 7171633640946549001
+    second: Vegetation Tileset 2_13
+  - first:
+      213: 5661155523250262275
+    second: Vegetation Tileset 2_14
+  - first:
+      213: -7872582559615833814
+    second: Vegetation Tileset 2_15
+  - first:
+      213: 7264664393198269636
+    second: Vegetation Tileset 2_16
+  - first:
+      213: 5869005202363962204
+    second: Vegetation Tileset 2_17
+  - first:
+      213: 9080425779189811715
+    second: Vegetation Tileset 2_18
+  - first:
+      213: -2768961308980174871
+    second: Vegetation Tileset 2_19
+  - first:
+      213: -1516300462472357873
+    second: Vegetation Tileset 2_20
+  - first:
+      213: 871913295655662184
+    second: Vegetation Tileset 2_21
+  - first:
+      213: 4380883587733454642
+    second: Vegetation Tileset 2_22
+  - first:
+      213: -1431822198300444881
+    second: Vegetation Tileset 2_23
+  - first:
+      213: -4183407251152028647
+    second: Vegetation Tileset 2_24
+  - first:
+      213: 2933807703055620525
+    second: Vegetation Tileset 2_25
+  - first:
+      213: 3165213740894603240
+    second: Vegetation Tileset 2_26
+  - first:
+      213: 2348725726003064300
+    second: Vegetation Tileset 2_27
+  - first:
+      213: -5970214698530178832
+    second: Vegetation Tileset 2_28
+  - first:
+      213: -1451473554193460522
+    second: Vegetation Tileset 2_29
+  - first:
+      213: -4385608219843542167
+    second: Vegetation Tileset 2_30
+  - first:
+      213: -9021859104035734358
+    second: Vegetation Tileset 2_31
+  - first:
+      213: 7880170831025510270
+    second: Vegetation Tileset 2_32
+  - first:
+      213: 8550052436439273517
+    second: Vegetation Tileset 2_33
+  - first:
+      213: -6492302149693285672
+    second: Vegetation Tileset 2_34
+  - first:
+      213: 4813428564673879335
+    second: Vegetation Tileset 2_35
+  - first:
+      213: -5735638948836049750
+    second: Vegetation Tileset 2_36
+  - first:
+      213: -273276341417625952
+    second: Vegetation Tileset 2_37
+  - first:
+      213: -7118488106481306229
+    second: Vegetation Tileset 2_38
+  - first:
+      213: -5274418949605095259
+    second: Vegetation Tileset 2_39
+  - first:
+      213: 3874236220907889094
+    second: Vegetation Tileset 2_40
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -40,7 +163,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -70,9 +193,882 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 512
+        width: 86
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9027d55208d7474a970d966994ce052
+      internalID: -7644568141518116961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_1
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 512
+        width: 108
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a69d69112ab104a41b98787822c9d2e9
+      internalID: 687088663039036611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_2
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 512
+        width: 122
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f52a9e715fd0d064392410d346faa338
+      internalID: -6295395010185212580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_3
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 512
+        width: 126
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfeaae5ef724b414a8500c8391b26193
+      internalID: 4974438691347034137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_4
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 512
+        width: 66
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61f94547f2ccae34c846636fb5bd25d9
+      internalID: 1104227357110183374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_5
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 512
+        width: 32
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bfd53f7b1531284dad43ed981cb32a4
+      internalID: -5649671145504508773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_6
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 512
+        width: 37
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc603e9c26adbb64dbeb5bdc7fc0e2d9
+      internalID: -7944271569136044426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_7
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 512
+        width: 27
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdb942e194908774dae5f98545b07861
+      internalID: -8860128954906175535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_8
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 512
+        width: 176
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91b2c852a04b8974a89499243fae76b6
+      internalID: -1703752375036068164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_9
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 512
+        width: 176
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8040270572961b54e99717289dc96a0c
+      internalID: -7931528840155858273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_10
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 320
+        width: 86
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 235c8510a06fdc14c8a6cadf09945b74
+      internalID: 7027144316590200245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_11
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 320
+        width: 108
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a22a19506222ac140b91020dc025171d
+      internalID: 5761057815202077924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_12
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 320
+        width: 122
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eb8fd9f6bf9b3049b3f98bfaae78966
+      internalID: -3097597473033573242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_13
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 320
+        width: 126
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61d087ecc759aa642bc2d83109b7570d
+      internalID: 7171633640946549001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_14
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 320
+        width: 66
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67088a44b5aa6e042bb3ef7242572e50
+      internalID: 5661155523250262275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_15
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 320
+        width: 32
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ccc313bbd8fc03488b056a7132907a1
+      internalID: -7872582559615833814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_16
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 320
+        width: 37
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f3455e885c700b4fbd5008ca38b0f04
+      internalID: 7264664393198269636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_17
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 320
+        width: 27
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df303e67e2eeb634cb8f7e4f3ccf8bbd
+      internalID: 5869005202363962204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_18
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 320
+        width: 176
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc96c28a0e9e9a34c8ac5d8c0a8878eb
+      internalID: 9080425779189811715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_19
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 311
+        width: 176
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e67b1b9d3d65364c8d13e5fb35f5418
+      internalID: -2768961308980174871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_20
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 128
+        width: 86
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2366ade9765bb4f449c90bb355692777
+      internalID: -1516300462472357873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_21
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 128
+        width: 108
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99f44fb8315803d4c9f35a890424e077
+      internalID: 871913295655662184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_22
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 128
+        width: 122
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: daacdcdec599bf6459d12e358b35ec06
+      internalID: 4380883587733454642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_23
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 128
+        width: 126
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca4b4a2f020505041a825f1d1757cae3
+      internalID: -1431822198300444881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_24
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 128
+        width: 66
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92b960da742f135429da25b21d386b38
+      internalID: -4183407251152028647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_25
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 128
+        width: 32
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e217f29b6eff224429dc955f02d20cde
+      internalID: 2933807703055620525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_26
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 128
+        width: 37
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36cdffdb581f73348b312c9cfd0f90a2
+      internalID: 3165213740894603240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_27
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 128
+        width: 27
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bcfe6830ad3cec45888a4155dace4f2
+      internalID: 2348725726003064300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_28
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 128
+        width: 176
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba5c0ddb4c1582e42aa9e7d9a55dbfe5
+      internalID: -5970214698530178832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_29
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 128
+        width: 176
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0d4c8fe5d891cd42bd4d2069c4ff4a7
+      internalID: -1451473554193460522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_30
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 80
+        width: 41
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 532814c0f08919e41a5487d5b3e0e7ca
+      internalID: -4385608219843542167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_31
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 0
+        width: 68
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f487a3e5e9bfdc747b39f8e90542c0a3
+      internalID: -9021859104035734358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_32
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 64
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa72bc57c60632243b1df2127e7aa3e4
+      internalID: 7880170831025510270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_33
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 0
+        width: 68
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e45a21100e5c0f645824a0c74751b576
+      internalID: 8550052436439273517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_34
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 0
+        width: 64
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a55f4b8d24aeae4ab30866fffcbaa28
+      internalID: -6492302149693285672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_35
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 0
+        width: 68
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca7231054984ab149849464d91f846c0
+      internalID: 4813428564673879335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_36
+      rect:
+        serializedVersion: 2
+        x: 697
+        y: 0
+        width: 64
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d11260757abb1da47999e3b74d3dffe6
+      internalID: -5735638948836049750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_37
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 64
+        width: 32
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c979f1b1b16ea541b7c8a05e5618813
+      internalID: -273276341417625952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_38
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 48
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ce7f5f9efce32f4895f33ec8ba7f89d
+      internalID: -7118488106481306229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_39
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 0
+        width: 48
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2685df9db074fc54599ac798df14e721
+      internalID: -5274418949605095259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vegetation Tileset 2_40
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 0
+        width: 48
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9454c81860fb6bc4f92e1fa160292f4d
+      internalID: 3874236220907889094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

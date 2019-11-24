@@ -7,37 +7,61 @@ using UnityEngine.SceneManagement;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.Playables;
 
-public enum State { PAUSED, PLAYING, GAMEOVER }
+public enum State { PAUSED, PLAYING, GAMEOVER, CONSOLE }
 public class GameController : MonoBehaviour, IEventSystemHandler
 {
     // Handles Pause, Play, Settings, Saving, Loading
 
+    // Scene Loading Values
+    [SerializeField] private AudioSource music;
+    [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private Slider slider;
+    [SerializeField] private Text progressText;
+    [SerializeField] private Image image;
+    [SerializeField] private AudioSource BossMusic;
+    [SerializeField] private GameObject Timeline;
+    
+    // World Values
     [SerializeField] private GameObject PauseMenu = null;
+    [SerializeField] private GameObject BossHandler = null;
     [SerializeField] private GameObject DeathScreen = null;
-    [SerializeField] private GameObject World;
-    [SerializeField] private GameObject Spawn;
-    [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject World = null;
+    [SerializeField] private GameObject Spawn = null;
+    [SerializeField] private Player player = null;
 
     private State gameState;
+    private const float fadeTime = 1.0f;
 
-    string[] cheatCode = new string[] { "k", "i", "l", "l" };
-    private int index = 0;
+    // Cheat Dictionary and Input
+    [SerializeField] private GameObject inputFieldHolder = null;
+    [SerializeField] private InputField inputField = null;
+    [SerializeField] private Text logText = null; 
+    IDictionary<string, Action> CheatDict;
 
+    // Game Data and Scene Count
     public static GameData currentData;
-    public List<Scene> scenes;
+    protected List<Scene> scenes;
 
-    public static event Action DeadPlayer;
+    // Binary Formatter Serializes the Game Data
+    BinaryFormatter bf;
 
+    // Game Controller Instance
     private static GameController _instance = null;
     public static GameController Instance { get { return _instance; } }
 
     private void Awake()
-    { 
-        DontDestroyOnLoad(this.gameObject);
+    {
+        CheatDict = new Dictionary<string, Action>();
+        bf = new BinaryFormatter();
         World = GameObject.FindWithTag("World");
         Spawn = GameObject.FindWithTag("Respawn");
-        Player = GameObject.FindGameObjectWithTag("Player");
+        player = FindObjectOfType<Player>();
+        BossHandler = World.transform.GetChild(6).gameObject;
+        music = World.GetComponent<AudioSource>();
+        DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
@@ -46,7 +70,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         if (_instance == null)
         {
             gameState = State.PLAYING;
-            ExecuteEvents.Execute<MessageSystem>(Player, null, (x, y) => x.SpawnHere(Spawn));
+            ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.SpawnHere(Spawn));
 
             scenes = new List<Scene>();
 
@@ -64,23 +88,24 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         {
             Destroy(gameObject);
         }
+
+        CheatDict.Add("kill", KillPlayer);
+        CheatDict.Add("skip scene", LoadNextScene);
+        CheatDict.Add("help", Help);
     }
-    
+
     void Update()
     {
-        CheatCodeParser();
-        Debug.Log(Input.GetAxis("DPadX"));
-
+        // Game Controller Does Not Need To Exist In Menu
         if (SceneManager.GetActiveScene().name == "Menu")
         {
             Destroy(this.gameObject);
         }
 
+        // Game State Handling
         switch (gameState)
         {
             case State.PAUSED:
-                Cursor.visible = true;
-
                 if (Input.GetButtonDown("Cancel"))
                 {
                     PlayGame();
@@ -88,24 +113,38 @@ public class GameController : MonoBehaviour, IEventSystemHandler
                 }
                 break;
             case State.PLAYING:
-                Cursor.visible = false;
-
+                // Player presses start or escape
                 if (Input.GetButtonDown("Cancel"))
                 {
                     PauseGame();
                     gameState = State.PAUSED;
                 }
 
-                /*if (DeadPlayer != null) //If player is dead
+                // If player is dead
+                if (player.tag == "Dead") 
                 {
                     gameState = State.GAMEOVER;
-                }*/
+                }
+
+                if (Input.GetKeyDown(KeyCode.BackQuote))
+                {
+                    Time.timeScale = 0;
+                    inputFieldHolder.SetActive(true);
+                    gameState = State.CONSOLE;
+                }
 
                 break;
             case State.GAMEOVER:
                 // Use some type of System to see when player dies
-                Cursor.visible = true;
                 GameOver();
+                break;
+            case State.CONSOLE:
+                if (Input.GetKeyDown(KeyCode.BackQuote))
+                {
+                    Time.timeScale = 1;
+                    inputFieldHolder.SetActive(false);
+                    gameState = State.PLAYING;
+                }
                 break;
         }
     }
@@ -124,7 +163,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         World.SetActive(true);
     }
 
-    private void GameOver()
+    public void GameOver()
     {
         // Have the audio switch to the death music, when player dies
         // GetComponent<AudioSource>().clip == DeathAudio;
@@ -134,72 +173,175 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         World.SetActive(false);
     }
 
-    public void LoadNextScene()
+    public void MainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(0);
     }
 
-    private void CheatCodeParser()
+    public void ContinueGame()
     {
-        // Check if any key is pressed
-        if (Input.anyKeyDown)
+        World.SetActive(true);
+        DeathScreen.SetActive(false);
+
+
+        gameState = State.PLAYING;
+
+        ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.SpawnHere(Spawn));
+
+        Player.myHealth = 100;
+        Time.timeScale = 1;
+    }
+
+    public void InstantiateBoss()
+    {
+        music.Stop();
+        BossMusic.Play();
+        Timeline.SetActive(true);
+
+        StartCoroutine(WaitForCutscene(Timeline.GetComponent<PlayableDirector>().duration));
+        ExecuteEvents.Execute<SpawnBoss>(BossHandler, null, (x, y) => x.PlaceBoss());
+    }
+
+    public void BossIsDead()
+    {
+        player.bossIsDead = true;
+    }
+
+    IEnumerator WaitForCutscene(double TimelineDuration)
+    {
+        yield return new WaitForSeconds((float) TimelineDuration);
+    }
+
+    private void KillPlayer()
+    {
+        ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.Die());
+    }
+
+    public void LoadNextScene()
+    {
+        StartCoroutine(LoadQuietly(SceneManager.GetActiveScene().buildIndex + 1));
+    }
+
+    IEnumerator LoadQuietly(int sceneIndex)
+    {
+        FadeIn();
+        yield return new WaitForSeconds(fadeTime);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+
+        loadingScreen.SetActive(true);
+
+        while (!operation.isDone)
         {
-            // Check if the next key in the code is pressed
-            if (Input.GetKeyDown(cheatCode[index]))
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+
+            slider.value = progress;
+            progressText.text = progress * 100f + "%";
+            yield return null;
+        }
+    }
+
+    public void FadeIn()
+    {
+        for (float i = 0; i <= 1;)
+        {
+            music.volume -= 0.1f;
+            i += 0.1f;
+        }
+
+        image.CrossFadeAlpha(1.0f, fadeTime, false);
+    }
+
+    public void Help()
+    {
+        logText.text = "Commands:\n";
+
+        foreach (string key in CheatDict.Keys)
+        {
+            switch(key)
             {
-                // Add 1 to index to check the next key in the code
-                if (index < cheatCode.Length)
-                {
-                    index++;
-                }
-                // Wrong key entered, we reset code typing
-                else
-                {
-                    index = 0;
-                }
+                case ("kill"):
+                    logText.text += key.ToString() + " : Kills the player\n";
+                    break;
+                case ("skip scene"):
+                    logText.text += key.ToString() + " : Loads the next scene\n";
+                    break;
+                case ("help"):
+                    logText.text += key.ToString() + " : Prints every avaialble command";
+                    break;
             }
+            
         }
+    }
 
-        // If index reaches the length of the cheatCode string, 
-        // the entire code was correctly entered
-        if (index == cheatCode.Length)
+    public void CheatCodeParser()
+    {
+        CheckInput(inputField.text);
+    }
+
+    void CheckInput(string str)
+    {
+        if (CheatDict.ContainsKey(str) == false)
         {
-            // Tell Player to die
-            ExecuteEvents.Execute<MessageSystem>(Player, null, (x, y) => x.Die());
-
-            // Reset cheat code index
-            index = 0;
+            return;
         }
+
+        CheatDict[str]();
+    }
+
+    public void ProcessPlayerData(Vector3 location, List<GameObject> GunsOwned, List<GameObject> Inventory, Scene currentScene)
+    {
+        currentData.playerLocation = location;
+        currentData.GunsOwned = GunsOwned;
+        currentData.ItemInventory = Inventory;
+        currentData.scene = currentScene;
+        currentData.CurrentWorldData = World;
     }
 
     void Save()
     {
-        // Binary Formatter Serializes
-        BinaryFormatter bf = new BinaryFormatter();
-
         // Filestream creates a file using arguments
         // FileStream file = File.Create a file in the player's game destination
-        // bf.Serialize(file)
+        FileStream file = File.Create(Application.persistentDataPath + "/SavedGame.sav");
+
+        // Encode the data
+        bf.Serialize(file, currentData);
+
+        // Close Stream
+        file.Close();
     }
 
     void Load()
     {
+        if (File.Exists(Application.persistentDataPath + "/SavedGame.sav"))
+        {
+            FileStream file = File.Open(Application.persistentDataPath + "/SavedGame.sav", FileMode.Open);
 
+            // Populates current game data
+            currentData = (GameData)bf.Deserialize(file);
+
+            // Close Stream
+            file.Close();
+        }
     }
 
     [Serializable]
     public class GameData
     {
-        public int PlayerHealth { get; set; }
+        public float playerHealth;
+        public GameObject CurrentWorldData;
         public Scene scene;
-        public GameObject[] GunsOwned;
-        public Vector2 playerLocation;
+        public List<GameObject> GunsOwned;
+        public List<GameObject> ItemInventory;
+        public Vector3 playerLocation;
 
         public GameData()
         {
-            PlayerHealth = 0;
+            playerHealth = 100.0f;
+            CurrentWorldData = null;
             scene = SceneManager.GetActiveScene();
             GunsOwned = null;
+            ItemInventory = null;
             playerLocation = Vector2.zero;
         }
     }

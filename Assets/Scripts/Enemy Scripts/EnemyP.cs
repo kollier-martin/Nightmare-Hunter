@@ -1,21 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 abstract public class EnemyP : MonoBehaviour, MessageSystem
 {
-    public GameObject platform;
-    float moveSpeed = 0f;
+    readonly float moveSpeed = 1f;
     bool move = true;
-
+    
     private float lastHitDone;
+
     private Animator anim;
+    public GameObject DeathEffect;
 
     public Transform targetToHit;
     protected float targetDistance;
 
-    float MaxXPos, MinXPos;
+    public float MaxXPos, MinXPos;
 
+    [SerializeField] protected SpriteRenderer SP;
     [SerializeField] protected float myHealth;
     protected float speed;
     protected float attackRange;
@@ -24,16 +27,17 @@ abstract public class EnemyP : MonoBehaviour, MessageSystem
 
     public void Awake()
     {
+        SP = GetComponent<SpriteRenderer>();
         setObjects();
     }
 
     public virtual void Update()
     {
         // If health below 1, entity is dead
-        if (myHealth < 1.0f)
+        if (myHealth <= 0f)
         {
-            // Activate death animation
-            // At end of death animation run, then destroy
+            // Activate death animation then Destroy object
+            Instantiate(DeathEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
@@ -48,27 +52,34 @@ abstract public class EnemyP : MonoBehaviour, MessageSystem
         if (targetDistance < attackDelay)
         {
             // Use Trigger on collider as a vision to start attacking the player
+
         }
     }
 
     void Move()
     {
-        if (transform.position.x > MaxXPos)
+        if (myHealth > 0)
         {
-            move = false;
-        }
+            if (transform.position.x > MaxXPos)
+            {
+                move = false;
+                SP.flipX = true;
+            }
 
-        if (transform.position.x < MinXPos)
-        {
-            move = true;
-        }
+            if (transform.position.x < MinXPos)
+            {
+                move = true;
+                SP.flipX = false;
+            }
 
-        if (move)
-        {
-            transform.position = new Vector3(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
-        }else if (!move)
-        {
-            transform.position = new Vector3(transform.position.x - moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+            if (move)
+            {
+                transform.position = new Vector3(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+            }
+            else if (!move)
+            {
+                transform.position = new Vector3(transform.position.x - moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+            }
         }
     }
 
@@ -84,12 +95,6 @@ abstract public class EnemyP : MonoBehaviour, MessageSystem
         this.speed = speed;
         this.attackRange = attackRange;
         this.attackDelay = attackDelay;
-    }
-
-    protected void SetMaxMin(float min, float max)
-    {
-        MaxXPos = max;
-        MinXPos = min;
     }
 
     public void Die()

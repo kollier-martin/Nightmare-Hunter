@@ -62,34 +62,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PlayerActions.cs" />
+    <Compile Include="Assets\Effects\KY_effects\Script\ConGUI.cs" />
+    <Compile Include="Assets\Effects\KY_effects\Script\Lighting.cs" />
+    <Compile Include="Assets\Input System\PlayerActions.cs" />
+    <Compile Include="Assets\Scripts\DestroyAfterAnim.cs" />
+    <Compile Include="Assets\Scripts\DestroyAfterParticle.cs" />
+    <Compile Include="Assets\Scripts\Enemy Scripts\Basic Creatures\Mushroom.cs" />
+    <Compile Include="Assets\Scripts\Enemy Scripts\Basic Creatures\Skull.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\Basic Creatures\Slime.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\Bosses\Grog.cs" />
+    <Compile Include="Assets\Scripts\Enemy Scripts\Bosses\Marlo.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\Bosses\SpawnBoss.cs" />
-    <Compile Include="Assets\Scripts\Enemy Scripts\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\EnemyP.cs" />
+    <Compile Include="Assets\Scripts\Items\Chest.cs" />
     <Compile Include="Assets\Scripts\MessageSystem.cs" />
     <Compile Include="Assets\Scripts\Movement Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerCompanion.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\TimelineManager.cs" />
     <Compile Include="Assets\Scripts\UI\GameController.cs" />
+    <Compile Include="Assets\Scripts\UI\LoadScreen.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenu.cs" />
     <Compile Include="Assets\Scripts\UI\ResetVolume.cs" />
     <Compile Include="Assets\Scripts\UI\Skip.cs" />
     <Compile Include="Assets\Scripts\UI\Teleport.cs" />
-    <Compile Include="Assets\Scripts\UI\ToMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Volume.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\AR.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\IGun.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\Pistol.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\Revolver.cs" />
-    <Compile Include="Assets\Scripts\Weapon Scripts\Shotgun.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\SMG.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\Sniper.cs" />
     <Compile Include="Assets\Scripts\World\PlatformMovement.cs" />
-    <Compile Include="Assets\Scripts\World\Portal\Portal.cs" />
+    <Compile Include="Assets\Scripts\World\Thwomp.cs" />
+    <Compile Include="Assets\Scripts\World\TutorialManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -129,6 +137,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\Sprites\floating_skull_enemy\style_A\spritesheet\spritesheet.txt" />
+    <None Include="Assets\Effects\KY_effects\MagicEffectsPackFree\ReadMe.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\Sprites\floating_skull_enemy\style_D\spritesheet\spritesheet.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
@@ -151,7 +160,7 @@
     <None Include="Assets\Sprites\floating_skull_enemy\readme.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
-    <None Include="Assets\Sprites\Slimes\LICENSE.txt" />
+    <None Include="Assets\LoopAndMusicFree\_readme\readme_en_ver1.4.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/xIndi/Documents/Nightmare Hunter with Placeholder/Nightmare Hunter (PlaceHolder)/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

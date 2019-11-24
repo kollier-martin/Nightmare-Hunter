@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -869744931
-  m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingLayer: 5
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 2655bd140e8893d4d8b8b89913d9e8b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -98,6 +98,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   speedX: 3
+  speedY: 0
+  DestroyEffect: {fileID: 4328819427209529392, guid: 599bce1c7741a5c4c99c8ed648349028,
+    type: 3}
+  rb: {fileID: 2318584167668955022}
 --- !u!61 &5735171379424859546
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -160,4 +164,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 4
+  m_Constraints: 0

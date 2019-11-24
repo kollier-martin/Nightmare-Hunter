@@ -8,6 +8,5 @@ public class Slime : EnemyP
     void Start()
     {
         SetVariables(5, 100, 10, 1, 1);
-        SetMaxMin(5f, .5f);
     }
 }
