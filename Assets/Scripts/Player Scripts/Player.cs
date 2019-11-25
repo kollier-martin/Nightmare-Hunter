@@ -8,9 +8,6 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, MessageSystem
 {
-    public GameObject mainCam;
-    public GameObject bossCam;
-
     private Slider health;
     private bool dead = false;
     int i = 0;
@@ -273,10 +270,7 @@ public class Player : MonoBehaviour, MessageSystem
         var BossSpawn = GameObject.FindGameObjectWithTag("Boss Spawn");
         SpawnHere(BossSpawn);
 
-        mainCam.SetActive(false);
-        bossCam.SetActive(true);
-
-        ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.InstantiateBoss());
+        ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.InstantiateMarlo());
     }
 
     IEnumerator Death()
@@ -312,7 +306,7 @@ public class Player : MonoBehaviour, MessageSystem
 
     public void SpawnHere(GameObject Spawn)
     {
-        transform.position = new Vector3(Spawn.transform.position.x, Spawn.transform.position.y, transform.position.z);
+        transform.position = new Vector3(Spawn.transform.position.x, Spawn.transform.position.y, Spawn.transform.position.z);
     }
 
     public void TakeDamage(int damage)

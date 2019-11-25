@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlatformMovement : MonoBehaviour
 {
     public float MaxX, MaxY, MinX, MinY;
-    readonly float moveSpeed = 2.5f;
+    public float moveSpeed = 2.5f;
     bool moveY = true;
     bool moveX = true;
 

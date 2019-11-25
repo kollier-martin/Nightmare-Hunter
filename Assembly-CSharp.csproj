@@ -65,6 +65,7 @@
     <Compile Include="Assets\Effects\KY_effects\Script\ConGUI.cs" />
     <Compile Include="Assets\Effects\KY_effects\Script\Lighting.cs" />
     <Compile Include="Assets\Input System\PlayerActions.cs" />
+    <Compile Include="Assets\Scripts\CameraSwitch.cs" />
     <Compile Include="Assets\Scripts\DestroyAfterAnim.cs" />
     <Compile Include="Assets\Scripts\DestroyAfterParticle.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\Basic Creatures\Mushroom.cs" />

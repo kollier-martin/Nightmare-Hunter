@@ -21,9 +21,13 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     [SerializeField] private Slider slider;
     [SerializeField] private Text progressText;
     [SerializeField] private Image image;
-    [SerializeField] private AudioSource BossMusic;
+    [SerializeField] public AudioSource BossMusic;
     [SerializeField] private GameObject Timeline;
-    
+
+    // Rendering Cameras
+    [SerializeField]
+    private GameObject mainCam, bossCam;
+
     // World Values
     [SerializeField] private GameObject PauseMenu = null;
     [SerializeField] private GameObject BossHandler = null;
@@ -88,6 +92,8 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         {
             Destroy(gameObject);
         }
+
+        CameraSwitch.CurrentCam = mainCam.GetComponent<Camera>();
 
         CheatDict.Add("kill", KillPlayer);
         CheatDict.Add("skip scene", LoadNextScene);
@@ -192,24 +198,22 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         Time.timeScale = 1;
     }
 
-    public void InstantiateBoss()
+    public void InstantiateMarlo()
     {
         music.Stop();
-        BossMusic.Play();
+
         Timeline.SetActive(true);
 
-        StartCoroutine(WaitForCutscene(Timeline.GetComponent<PlayableDirector>().duration));
-        ExecuteEvents.Execute<SpawnBoss>(BossHandler, null, (x, y) => x.PlaceBoss());
+        mainCam.SetActive(false);
+        CameraSwitch.CurrentCam = bossCam.GetComponent<Camera>();
+        bossCam.SetActive(true);
+
+        //ExecuteEvents.Execute<SpawnBoss>(BossHandler, null, (x, y) => x.PlaceMarlo());
     }
 
     public void BossIsDead()
     {
         player.bossIsDead = true;
-    }
-
-    IEnumerator WaitForCutscene(double TimelineDuration)
-    {
-        yield return new WaitForSeconds((float) TimelineDuration);
     }
 
     private void KillPlayer()

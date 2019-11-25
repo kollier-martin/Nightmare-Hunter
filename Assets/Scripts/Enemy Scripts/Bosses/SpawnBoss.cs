@@ -11,8 +11,13 @@ public class SpawnBoss : MonoBehaviour, IEventSystemHandler
 
     public void PlaceBoss()
     {
+        Instantiate(Boss, new Vector3(Holder.transform.position.x, Holder.transform.position.y, Holder.transform.position.z), Holder.transform.rotation);
+    }
+
+    public void PlaceMarlo()
+    {
         // Marlo Handler
-        Instantiate(Boss, new Vector3(Holder.transform.position.x, Holder.transform.position.y, Holder.transform.position.z), Holder.transform.rotation, Holder.transform);
+        FindObjectOfType<Marlo>().gameObject.SetActive(true);
     }
 
     public void OnTriggerEnter2D(Collider2D collision)

@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 
 abstract public class EnemyP : MonoBehaviour, MessageSystem
 {
-    readonly float moveSpeed = 1f;
-    bool move = true;
+    protected readonly float moveSpeed = 1f;
+    protected bool move = true;
     
     private float lastHitDone;
 
@@ -43,7 +43,7 @@ abstract public class EnemyP : MonoBehaviour, MessageSystem
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         // Move entity in a path
         Move();

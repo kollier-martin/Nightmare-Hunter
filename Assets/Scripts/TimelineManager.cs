@@ -8,6 +8,8 @@ using UnityEngine.Video;
 
 public class TimelineManager : MonoBehaviour
 {
+    GameController CurrentGameController;
+
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Image image;
     [SerializeField] private Player player;
@@ -17,6 +19,15 @@ public class TimelineManager : MonoBehaviour
 
     private void Awake()
     {
+        try
+        {
+            CurrentGameController = FindObjectOfType<GameController>();
+        }
+        catch
+        {
+
+        }
+        
         cutscene = GetComponent<PlayableDirector>();
         StartCoroutine(FadeIn());
     }
@@ -33,8 +44,9 @@ public class TimelineManager : MonoBehaviour
             Destroy(player);
             loadingScreen.SetActive(true);
         }
-        else
+        else if (cutscene.time == cutscene.duration)
         {
+            CurrentGameController.BossMusic.Play();
             this.gameObject.SetActive(false);
         }
     }

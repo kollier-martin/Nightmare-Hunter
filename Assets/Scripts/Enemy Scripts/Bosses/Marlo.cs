@@ -37,6 +37,35 @@ public class Marlo : EnemyP, IEventSystemHandler
         }
     }
 
+    public override void FixedUpdate()
+    {
+        StartCoroutine(MarloMovement());
+    }
+
+    IEnumerator MarloMovement()
+    {
+        if (transform.position.x > MaxXPos)
+        {
+            move = false;
+        }
+
+        if (transform.position.x < MinXPos)
+        {
+            move = true;
+        }
+
+        if (move)
+        {
+            transform.position = new Vector3(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+            yield return new WaitForSeconds(2.5f);
+        }
+        else if (!move)
+        {
+            yield return new WaitForSeconds(2.5f);
+            transform.position = new Vector3(transform.position.x - moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
+        }
+    }
+
     void IAmDead()
     {
         // Play cutscene

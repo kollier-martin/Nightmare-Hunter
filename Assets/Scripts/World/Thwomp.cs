@@ -138,7 +138,7 @@ public class Thwomp : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 8 || collision.gameObject.name == "Player" && PlayerUnder == true)
+        if (collision.gameObject.layer == 8)
         {
             ExecuteEvents.Execute<CameraFollow>(Cam, null, (x, y) => x.Shake());
             OnGround = true;
