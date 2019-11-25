@@ -79,7 +79,6 @@
     <Compile Include="Assets\Scripts\MessageSystem.cs" />
     <Compile Include="Assets\Scripts\Movement Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\Player Scripts\PlayerCompanion.cs" />
     <Compile Include="Assets\Scripts\Player Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\TimelineManager.cs" />
     <Compile Include="Assets\Scripts\UI\GameController.cs" />
@@ -96,6 +95,7 @@
     <Compile Include="Assets\Scripts\Weapon Scripts\Revolver.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\SMG.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\Sniper.cs" />
+    <Compile Include="Assets\Scripts\World\PlatformCatcher.cs" />
     <Compile Include="Assets\Scripts\World\PlatformMovement.cs" />
     <Compile Include="Assets\Scripts\World\Thwomp.cs" />
     <Compile Include="Assets\Scripts\World\TutorialManager.cs" />

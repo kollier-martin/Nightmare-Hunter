@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     [SerializeField] private Text progressText;
     [SerializeField] private Image image;
     [SerializeField] public AudioSource BossMusic;
-    [SerializeField] private GameObject Timeline;
+    [SerializeField] public GameObject Timeline;
 
     // Rendering Cameras
     [SerializeField]
@@ -54,6 +54,8 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     // Game Controller Instance
     private static GameController _instance = null;
+    public bool cutsceneDone;
+
     public static GameController Instance { get { return _instance; } }
 
     private void Awake()
@@ -71,6 +73,12 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     // Start is called before the first frame update
     void Start()
     {
+        // Game Controller Does Not Need To Exist In Menu
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            Destroy(this.gameObject);
+        }
+
         if (_instance == null)
         {
             gameState = State.PLAYING;
@@ -102,10 +110,11 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     void Update()
     {
-        // Game Controller Does Not Need To Exist In Menu
-        if (SceneManager.GetActiveScene().name == "Menu")
+        if (cutsceneDone == true)
         {
-            Destroy(this.gameObject);
+            music.Stop();
+            BossMusic.Play();
+            cutsceneDone = false;
         }
 
         // Game State Handling
@@ -200,7 +209,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     public void InstantiateMarlo()
     {
-        music.Stop();
+        music.volume = 0.5f;
 
         Timeline.SetActive(true);
 
@@ -209,6 +218,12 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         bossCam.SetActive(true);
 
         //ExecuteEvents.Execute<SpawnBoss>(BossHandler, null, (x, y) => x.PlaceMarlo());
+    }
+
+    public void CutsceneDone()
+    {
+        cutsceneDone = true;
+        Timeline.SetActive(false);
     }
 
     public void BossIsDead()

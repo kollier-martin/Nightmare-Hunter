@@ -64,21 +64,20 @@ public class PlayerController : MonoBehaviour
             mousePos = CameraSwitch.CurrentCam.ScreenToWorldPoint(mousePos);
             var direction = new Vector2(mousePos.x - transform.position.x, mousePos.y = transform.position.y);
 
-            Debug.Log(direction.x + " : " + facingRight);
-
             // If the input is moving the player right and the player is facing left
-            if (direction.x > 0 && !facingRight)
+            if ((direction.x > 0 ) && !facingRight)
             {
                 // Flip X Scale
                 Flip();
             }
             // Otherwise if the input is moving the player left and the player is facing right
-            else if (direction.x < 0 && facingRight)
+            else if ((direction.x < 0 ) && facingRight)
 			{
 				// Flip X Scale
 				Flip();
             }
 		}
+
         // If the player should jump
         if (grounded)
         {
@@ -120,7 +119,9 @@ public class PlayerController : MonoBehaviour
         // Switch the way the player is labelled as facing.
         facingRight = !facingRight;
 
-        Debug.Log("Rotating");
-        transform.Rotate(0f, 180f, 0f);
-	}
+        // Multiply the player's x local scale by -1.
+		Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
+    }
 }

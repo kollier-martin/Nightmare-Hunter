@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, MessageSystem
     private Animator anim;
     private Rigidbody2D rb;
 
-    private GameObject GameSpawn;
+    private GameObject GameSpawn, BossSpawn;
     private SpriteRenderer CanInteractSR;
     private SpriteRenderer PlayerGotSR;
     private Animator PlayerGotAnim;
@@ -51,6 +51,7 @@ public class Player : MonoBehaviour, MessageSystem
     void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
     {
         bossIsDead = false;
+        SpawnHere(GameSpawn);
     }
 
     private void Awake()
@@ -60,6 +61,7 @@ public class Player : MonoBehaviour, MessageSystem
         CurrentController = FindObjectOfType<GameController>();
 
         GameSpawn = GameObject.FindGameObjectWithTag("Respawn");
+        BossSpawn = GameObject.FindGameObjectWithTag("Boss Spawn");
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -127,6 +129,7 @@ public class Player : MonoBehaviour, MessageSystem
         }
         else if (HasKey == true && Input.GetButtonDown("Open") && bossIsDead == false && i < 1 && onPortal == true)
         {
+            onPortal = false;
             StartFight();
             i++;
         }
@@ -196,8 +199,15 @@ public class Player : MonoBehaviour, MessageSystem
                 // Take fall damage
                 TakeDamage(5);
 
-                // Respawn
-                transform.position = GameSpawn.transform.position;
+                if(CameraSwitch.CurrentCam.name == "Boss Camera")
+                {
+                    transform.position = BossSpawn.transform.position;
+                }
+                else
+                {
+                    // Respawn
+                    transform.position = GameSpawn.transform.position;
+                }
                 break;
 
             case ("Moving Platform"):
@@ -267,7 +277,6 @@ public class Player : MonoBehaviour, MessageSystem
 
     public void StartFight()
     {
-        var BossSpawn = GameObject.FindGameObjectWithTag("Boss Spawn");
         SpawnHere(BossSpawn);
 
         ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.InstantiateMarlo());
@@ -346,5 +355,19 @@ public class Player : MonoBehaviour, MessageSystem
     public void DestroyMyself()
     {
         Destroy(gameObject);
+    }
+
+    [ExecuteInEditMode]
+    private void OnAnimatorMove()
+    {
+        if (anim == null)
+        {
+            return;
+        }
+
+        if (CurrentController.cutsceneDone == true)
+        {
+            anim.ApplyBuiltinRootMotion();
+        }
     }
 }

@@ -5442,7 +5442,7 @@ GameObject:
   - component: {fileID: 8455181725930406807}
   m_Layer: 0
   m_Name: Game Controller
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5484,6 +5484,9 @@ MonoBehaviour:
   progressText: {fileID: 3737746890397573781}
   image: {fileID: 3737746890352241816}
   BossMusic: {fileID: 8455181725930406807}
+  Timeline: {fileID: 0}
+  mainCam: {fileID: 0}
+  bossCam: {fileID: 0}
   PauseMenu: {fileID: 2899235126362337825}
   BossHandler: {fileID: 0}
   DeathScreen: {fileID: 7086150832051777494}
@@ -5493,6 +5496,7 @@ MonoBehaviour:
   inputFieldHolder: {fileID: 1962827179882711175}
   inputField: {fileID: 7598098923913409909}
   logText: {fileID: 7733416952264231916}
+  cutsceneDone: 0
 --- !u!82 &8455181725930406807
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5508,7 +5512,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

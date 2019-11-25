@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Playables;
 
 public class Marlo : EnemyP, IEventSystemHandler
 {
@@ -39,7 +40,10 @@ public class Marlo : EnemyP, IEventSystemHandler
 
     public override void FixedUpdate()
     {
-        StartCoroutine(MarloMovement());
+        if (CurrenController.cutsceneDone == true)
+        {
+            StartCoroutine(MarloMovement());
+        }
     }
 
     IEnumerator MarloMovement()

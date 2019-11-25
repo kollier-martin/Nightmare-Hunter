@@ -584,10 +584,10 @@ GameObject:
   - component: {fileID: 7355971980563832942}
   - component: {fileID: 7355971980563832946}
   - component: {fileID: 7355971980563832941}
+  - component: {fileID: 358746202108226226}
   - component: {fileID: 7355971980563832940}
   - component: {fileID: 7355971980563832944}
   - component: {fileID: 5389622109007341276}
-  - component: {fileID: 358746202108226226}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -724,6 +724,22 @@ CircleCollider2D:
   m_Offset: {x: -0.0016873667, y: -0.08650888}
   serializedVersion: 2
   m_Radius: 0.08867751
+--- !u!70 &358746202108226226
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7355971980563832936}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.007000003, y: 0.080175854}
+  m_Size: {x: 0.17856652, y: 0.19964829}
+  m_Direction: 0
 --- !u!50 &7355971980563832940
 Rigidbody2D:
   serializedVersion: 4
@@ -786,22 +802,6 @@ MonoBehaviour:
   climb: 0
   onPortal: 0
   bossIsDead: 0
---- !u!70 &358746202108226226
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7355971980563832936}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.007000003, y: 0.080175854}
-  m_Size: {x: 0.17856652, y: 0.19964829}
-  m_Direction: 0
 --- !u!1 &7355971980840926343
 GameObject:
   m_ObjectHideFlags: 0

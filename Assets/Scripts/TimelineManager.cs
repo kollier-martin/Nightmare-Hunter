@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class TimelineManager : MonoBehaviour
+public class TimelineManager : MonoBehaviour, IEventSystemHandler
 {
     GameController CurrentGameController;
+    bool finished;
 
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Image image;
@@ -39,15 +41,14 @@ public class TimelineManager : MonoBehaviour
 
     private void Update()
     {
-        if (cutscene.time == cutscene.duration && SceneManager.GetActiveScene().name == "Opening Cutscene")
+        if (finished && SceneManager.GetActiveScene().name == "Opening Cutscene")
         {
             Destroy(player);
             loadingScreen.SetActive(true);
         }
-        else if (cutscene.time == cutscene.duration)
+        else if (finished)
         {
-            CurrentGameController.BossMusic.Play();
-            this.gameObject.SetActive(false);
+            ExecuteEvents.Execute<GameController>(CurrentGameController.gameObject, null, (x, y) => x.CutsceneDone());
         }
     }
 
@@ -55,24 +56,43 @@ public class TimelineManager : MonoBehaviour
     {
         image.CrossFadeAlpha(0.0f, fadeTime, false);
 
-        // Fixes player from looking like she's floating
-        foreach (Collider2D collider in player.GetComponents<Collider2D>())
-        {
-            collider.enabled = false;
-        }
+        //// Fixes player from looking like she's floating
+        //foreach (Collider2D collider in player.GetComponents<Collider2D>())
+        //{
+        //    collider.enabled = false;
+        //}
 
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(fadeTime);
 
-        // Reverts the "fix"
-        foreach (Collider2D collider in player.GetComponents<Collider2D>())
-        {
-            collider.enabled = true;
-        }
+        //// Reverts the "fix"
+        //foreach (Collider2D collider in player.GetComponents<Collider2D>())
+        //{
+        //    collider.enabled = true;
+        //}
     }
 
     IEnumerator StartCutsceneWithDelay()
     {
         yield return new WaitForSeconds(2.0f);
         cutscene.Play();
+    }
+
+    // Actions
+    void OnEnable()
+    {
+        cutscene.stopped += OnPlayableDirectorStopped;
+    }
+
+    void OnPlayableDirectorStopped(PlayableDirector aDirector)
+    {
+        if (cutscene == aDirector)
+        {
+            finished = true;
+        }
+    }
+
+    void OnDisable()
+    {
+        cutscene.stopped -= OnPlayableDirectorStopped;
     }
 }

@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class PlatformMovement : MonoBehaviour
 {
+    Rigidbody2D rb;
     public float MaxX, MaxY, MinX, MinY;
     public float moveSpeed = 2.5f;
     bool moveY = true;
     bool moveX = true;
 
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
        if (name.Contains("PX"))
        {
@@ -36,12 +42,12 @@ public class PlatformMovement : MonoBehaviour
 
         if (moveX)
         {
-            transform.position = new Vector2(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y);
+            rb.MovePosition(new Vector2(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y));
         }
 
         else if (!moveX)
         {
-            transform.position = new Vector2(transform.position.x - moveSpeed * Time.deltaTime, transform.position.y);
+            rb.MovePosition(new Vector2(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y));
         }
     }
 
@@ -59,12 +65,12 @@ public class PlatformMovement : MonoBehaviour
 
         if (moveY)
         {
-            transform.position = new Vector2(transform.position.x, transform.position.y + moveSpeed * Time.deltaTime);
+            rb.MovePosition(new Vector2(transform.position.x, transform.position.y + moveSpeed * Time.deltaTime));
         }
 
         else if (!moveY)
         {
-            transform.position = new Vector2(transform.position.x, transform.position.y - moveSpeed * Time.deltaTime);
+            rb.MovePosition(new Vector2(transform.position.x, transform.position.y - moveSpeed * Time.deltaTime));
         }
     }
 }
