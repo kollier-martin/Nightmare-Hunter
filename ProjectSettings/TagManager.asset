@@ -19,8 +19,12 @@ TagManager:
   - Key
   - Crusher
   - Dead
-  - Boss Spawn
   - BossCamera
+  - Boss Handler
+  - Timeline
+  - BossSpawn
+  - Boss Spawn
+  - Health
   layers:
   - Default
   - TransparentFX

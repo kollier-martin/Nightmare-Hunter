@@ -62,8 +62,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AttackCollider.cs" />
+    <Compile Include="Assets\attackPlayer.cs" />
+    <Compile Include="Assets\Cave.cs" />
+    <Compile Include="Assets\CloseGame.cs" />
     <Compile Include="Assets\Effects\KY_effects\Script\ConGUI.cs" />
     <Compile Include="Assets\Effects\KY_effects\Script\Lighting.cs" />
+    <Compile Include="Assets\idleBehavior.cs" />
     <Compile Include="Assets\Input System\PlayerActions.cs" />
     <Compile Include="Assets\Scripts\CameraSwitch.cs" />
     <Compile Include="Assets\Scripts\DestroyAfterAnim.cs" />
@@ -75,6 +80,7 @@
     <Compile Include="Assets\Scripts\Enemy Scripts\Bosses\Marlo.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\Bosses\SpawnBoss.cs" />
     <Compile Include="Assets\Scripts\Enemy Scripts\EnemyP.cs" />
+    <Compile Include="Assets\Scripts\InputSwitch.cs" />
     <Compile Include="Assets\Scripts\Items\Chest.cs" />
     <Compile Include="Assets\Scripts\MessageSystem.cs" />
     <Compile Include="Assets\Scripts\Movement Scripts\CameraFollow.cs" />
@@ -95,7 +101,6 @@
     <Compile Include="Assets\Scripts\Weapon Scripts\Revolver.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\SMG.cs" />
     <Compile Include="Assets\Scripts\Weapon Scripts\Sniper.cs" />
-    <Compile Include="Assets\Scripts\World\PlatformCatcher.cs" />
     <Compile Include="Assets\Scripts\World\PlatformMovement.cs" />
     <Compile Include="Assets\Scripts\World\Thwomp.cs" />
     <Compile Include="Assets\Scripts\World\TutorialManager.cs" />
@@ -161,7 +166,7 @@
     <None Include="Assets\Sprites\floating_skull_enemy\readme.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
-    <None Include="Assets\LoopAndMusicFree\_readme\readme_en_ver1.4.txt" />
+    <None Include="Assets\Audio\LoopAndMusicFree\_readme\readme_en_ver1.4.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/xIndi/Documents/Nightmare Hunter with Placeholder/Nightmare Hunter (PlaceHolder)/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

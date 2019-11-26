@@ -34,7 +34,7 @@ abstract public class IGun : MonoBehaviour
                 nextFire = Time.time + shotDelay;
                 bullet.setSpeedX(bulletSpeed * -1);
 
-                Instantiate(bullet, FirePoint.position, FirePoint.rotation); //Quaternion.Euler(0, 0, transform.rotation.z));
+                Instantiate(bullet, FirePoint.position, FirePoint.rotation);
                 gunSound.Play();
             }
         }
@@ -44,16 +44,33 @@ abstract public class IGun : MonoBehaviour
     {
         if (Time.timeScale == 1)
         {
-            var pos = CameraSwitch.CurrentCam.WorldToScreenPoint(transform.position);
-            var dir = Input.mousePosition - pos;
-            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-            if (Mathf.Cos(angle * Mathf.Deg2Rad) < 0) // Aiming left
+            if (InputSwitch.KeyboardInput == true)
             {
-                Vector3 newEulerAngles = transform.eulerAngles;
-                newEulerAngles.z += 180f;
-                transform.eulerAngles = newEulerAngles;
+                var pos = CameraSwitch.CurrentCam.WorldToScreenPoint(transform.position);
+                var dir = Input.mousePosition - pos;
+                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+                if (Mathf.Cos(angle * Mathf.Deg2Rad) < 0) // Aiming left
+                {
+                    Vector3 newEulerAngles = transform.eulerAngles;
+                    newEulerAngles.z += 180f;
+                    transform.eulerAngles = newEulerAngles;
+                }
+            }
+            else if (InputSwitch.JoyStickInput == true)
+            {
+                var JoystickPos = new Vector3(Input.GetAxis("RJoy X"), Input.GetAxis("RJoy Y"));
+                var dir = new Vector3(JoystickPos.x, JoystickPos.y);
+                var angle = Mathf.Atan2(-(dir.y), dir.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+                if (Mathf.Cos(angle * Mathf.Deg2Rad) < 0) // Aiming left
+                {
+                    Vector3 newEulerAngles = transform.eulerAngles;
+                    newEulerAngles.z += 180f;
+                    transform.eulerAngles = newEulerAngles;
+                }
             }
         }
     }

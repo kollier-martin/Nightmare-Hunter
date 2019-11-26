@@ -141,7 +141,7 @@ public class TutorialManager : MonoBehaviour
                     break;
                 case 5:
                     // Shoot Enemy
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetAxis("Fire1") > 0)
                     {
                         ControllerPopUpIndex++;
                     }
@@ -154,11 +154,15 @@ public class TutorialManager : MonoBehaviour
     {
         Time.timeScale = 1;
         Controller = true;
+
+        InputSwitch.JoyStickInput = true;
     }
 
     public void SetKeyboard()
     {
         Time.timeScale = 1;
         Keyboard = true;
+
+        InputSwitch.KeyboardInput = true;
     }
 }

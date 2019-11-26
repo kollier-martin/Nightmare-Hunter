@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     [SerializeField] private Text progressText;
     [SerializeField] private Image image;
     [SerializeField] public AudioSource BossMusic;
+    [SerializeField] public AudioSource AfterBossMusic;
     [SerializeField] public GameObject Timeline;
 
     // Rendering Cameras
@@ -43,7 +44,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     [SerializeField] private GameObject inputFieldHolder = null;
     [SerializeField] private InputField inputField = null;
     [SerializeField] private Text logText = null; 
-    IDictionary<string, Action> CheatDict;
+    IDictionary<string, Action> CheatDict = new Dictionary<string, Action>();
 
     // Game Data and Scene Count
     public static GameData currentData;
@@ -58,32 +59,63 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     public static GameController Instance { get { return _instance; } }
 
-    private void Awake()
+    private void Start()
     {
-        CheatDict = new Dictionary<string, Action>();
-        bf = new BinaryFormatter();
-        World = GameObject.FindWithTag("World");
-        Spawn = GameObject.FindWithTag("Respawn");
-        player = FindObjectOfType<Player>();
-        BossHandler = World.transform.GetChild(6).gameObject;
-        music = World.GetComponent<AudioSource>();
-        DontDestroyOnLoad(gameObject);
+        try
+        {
+            bf = new BinaryFormatter();
+            World = GameObject.FindWithTag("World");
+            Spawn = GameObject.FindWithTag("Respawn");
+            player = FindObjectOfType<Player>();
+            bossCam = GameObject.FindGameObjectWithTag("BossCamera");
+            mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+            BossHandler = GameObject.FindGameObjectWithTag("Boss Handler");
+            Timeline = GameObject.FindGameObjectWithTag("Timeline");
+
+            bossCam.SetActive(false);
+            Timeline.SetActive(false);
+            
+            music = World.GetComponent<AudioSource>();
+
+            CameraSwitch.CurrentCam = mainCam.GetComponent<Camera>();
+
+            CheatDict.Add("kill", KillPlayer);
+            CheatDict.Add("skip scene", LoadNextScene);
+            CheatDict.Add("help", Help);
+
+            if (SceneManager.GetActiveScene().buildIndex > 1)
+            {
+                ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.SpawnHere(Spawn));
+            }
+
+            DontDestroyOnLoad(gameObject);
+        }
+        catch
+        {
+
+        }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
     {
-        // Game Controller Does Not Need To Exist In Menu
-        if (SceneManager.GetActiveScene().name == "Menu")
+        if (scene.name == "Win Screen")
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
+        else
+        {
+            Start();
+        }
+    }
+    
+    void Awake()
+    {
+        SceneManager.sceneLoaded += this.OnLoadCallback;
 
         if (_instance == null)
         {
             gameState = State.PLAYING;
-            ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.SpawnHere(Spawn));
-
+            
             scenes = new List<Scene>();
 
             for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
@@ -98,69 +130,66 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
-
-        CameraSwitch.CurrentCam = mainCam.GetComponent<Camera>();
-
-        CheatDict.Add("kill", KillPlayer);
-        CheatDict.Add("skip scene", LoadNextScene);
-        CheatDict.Add("help", Help);
     }
 
     void Update()
     {
-        if (cutsceneDone == true)
+        if (SceneManager.GetActiveScene().buildIndex > 1)
         {
-            music.Stop();
-            BossMusic.Play();
-            cutsceneDone = false;
-        }
+            if (cutsceneDone == true)
+            {
+                music.Stop();
+                BossMusic.Play();
+                cutsceneDone = false;
+            }
 
-        // Game State Handling
-        switch (gameState)
-        {
-            case State.PAUSED:
-                if (Input.GetButtonDown("Cancel"))
-                {
-                    PlayGame();
-                    gameState = State.PLAYING;
-                }
-                break;
-            case State.PLAYING:
-                // Player presses start or escape
-                if (Input.GetButtonDown("Cancel"))
-                {
-                    PauseGame();
-                    gameState = State.PAUSED;
-                }
+            // Game State Handling
+            switch (gameState)
+            {
+                case State.PAUSED:
+                    if (Input.GetButtonDown("Cancel"))
+                    {
+                        PlayGame();
+                        gameState = State.PLAYING;
+                    }
+                    break;
+                case State.PLAYING:
+                    // Player presses start or escape
+                    if (Input.GetButtonDown("Cancel"))
+                    {
+                        PauseGame();
+                        gameState = State.PAUSED;
+                    }
 
-                // If player is dead
-                if (player.tag == "Dead") 
-                {
-                    gameState = State.GAMEOVER;
-                }
+                    // If player is dead
+                    if (player.tag == "Dead")
+                    {
+                        gameState = State.GAMEOVER;
+                    }
 
-                if (Input.GetKeyDown(KeyCode.BackQuote))
-                {
-                    Time.timeScale = 0;
-                    inputFieldHolder.SetActive(true);
-                    gameState = State.CONSOLE;
-                }
+                    if (Input.GetKeyDown(KeyCode.BackQuote))
+                    {
+                        Time.timeScale = 0;
+                        inputFieldHolder.SetActive(true);
+                        gameState = State.CONSOLE;
+                    }
 
-                break;
-            case State.GAMEOVER:
-                // Use some type of System to see when player dies
-                GameOver();
-                break;
-            case State.CONSOLE:
-                if (Input.GetKeyDown(KeyCode.BackQuote))
-                {
-                    Time.timeScale = 1;
-                    inputFieldHolder.SetActive(false);
-                    gameState = State.PLAYING;
-                }
-                break;
+                    break;
+                case State.GAMEOVER:
+                    // Use some type of System to see when player dies
+                    GameOver();
+                    break;
+                case State.CONSOLE:
+                    if (Input.GetKeyDown(KeyCode.BackQuote))
+                    {
+                        Time.timeScale = 1;
+                        inputFieldHolder.SetActive(false);
+                        gameState = State.PLAYING;
+                    }
+                    break;
+            }
         }
     }
 
@@ -168,20 +197,17 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     {
         Time.timeScale = 0;
         PauseMenu.SetActive(true);
-        World.SetActive(false);
     }
 
     public void PlayGame()
     {
         Time.timeScale = 1;
         PauseMenu.SetActive(false);
-        World.SetActive(true);
     }
 
     public void GameOver()
     {
         // Have the audio switch to the death music, when player dies
-        // GetComponent<AudioSource>().clip == DeathAudio;
 
         Time.timeScale = 0;
         DeathScreen.SetActive(true);
@@ -203,31 +229,42 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
         ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.SpawnHere(Spawn));
 
-        Player.myHealth = 100;
+        player.myHealth = 100;
         Time.timeScale = 1;
     }
 
     public void InstantiateMarlo()
     {
-        music.volume = 0.5f;
-
-        Timeline.SetActive(true);
+        player.speed = 0;
+        player.GetComponent<PlayerController>().jumpForce = 0f;
+        ExecuteEvents.Execute<Cave>(World.gameObject, null, (x, y) => x.TurnDownMusic());
 
         mainCam.SetActive(false);
-        CameraSwitch.CurrentCam = bossCam.GetComponent<Camera>();
         bossCam.SetActive(true);
+        CameraSwitch.CurrentCam = bossCam.GetComponent<Camera>();
 
-        //ExecuteEvents.Execute<SpawnBoss>(BossHandler, null, (x, y) => x.PlaceMarlo());
+        Timeline.SetActive(true);
+        Timeline.GetComponent<PlayableDirector>().Play();
     }
 
-    public void CutsceneDone()
+    public void CutsceneDone(bool val)
     {
-        cutsceneDone = true;
-        Timeline.SetActive(false);
+        if (val == true)
+        {
+            cutsceneDone = true;
+            Timeline.SetActive(false);
+        }
+        else
+        {
+            cutsceneDone = false;
+        }
     }
 
     public void BossIsDead()
     {
+        ExecuteEvents.Execute<Cave>(World.gameObject, null, (x, y) => x.TurnOffMusic());
+        BossMusic.Stop();
+        AfterBossMusic.Play();
         player.bossIsDead = true;
     }
 
@@ -264,7 +301,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     {
         for (float i = 0; i <= 1;)
         {
-            music.volume -= 0.1f;
+            World.GetComponent<AudioSource>().volume -= 0.1f;
             i += 0.1f;
         }
 
@@ -316,8 +353,14 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         currentData.scene = currentScene;
         currentData.CurrentWorldData = World;
     }
+    
 
-    void Save()
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void Save()
     {
         // Filestream creates a file using arguments
         // FileStream file = File.Create a file in the player's game destination
@@ -330,7 +373,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         file.Close();
     }
 
-    void Load()
+    public void Load()
     {
         if (File.Exists(Application.persistentDataPath + "/SavedGame.sav"))
         {
@@ -342,6 +385,8 @@ public class GameController : MonoBehaviour, IEventSystemHandler
             // Close Stream
             file.Close();
         }
+
+        StartCoroutine(LoadQuietly(currentData.scene.buildIndex));
     }
 
     [Serializable]

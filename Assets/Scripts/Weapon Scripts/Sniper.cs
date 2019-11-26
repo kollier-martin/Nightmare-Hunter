@@ -7,7 +7,7 @@ public class Sniper : IGun
     // Start is called before the first frame update
     void Start()
     {
-        shotDelay = 3.0f;
+        shotDelay = 5.0f;
         if (name.Contains("Upgraded"))
         {
             bullet.setDamage(40);

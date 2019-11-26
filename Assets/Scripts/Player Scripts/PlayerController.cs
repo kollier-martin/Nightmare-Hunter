@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private const float jumpForce = 5f;           // Amount of force added when the player jumps.
+    public float jumpForce = 4.5f;           // Amount of force added when the player jumps.
     private const float smoothing = .05f; // How much to smooth out the movement
     private readonly bool airMovement = true;   // Whether or not a player can steer while jumping
     public LayerMask WhatIsGround;    // A mask determining what is ground to the character
@@ -12,14 +12,22 @@ public class PlayerController : MonoBehaviour
     private bool facingRight = true;  // For determining which way the player is currently facing.
 
     private Collider2D Ladders;  // Colliders of the ladders that can be climbed
-    public float climbSpeed;
+    public float climbSpeed = 5;
     private bool doubleJumped;
 
     private Animator anim;
     private Rigidbody2D rb;
     private Vector3 velocity = Vector3.zero;
-    
-	private void Awake()
+
+    // For Mouse Flipping
+    Vector3 mousePos;
+    Vector2 direction;
+
+    // For Controller Flipping
+    Vector3 JoystickPos;
+    Vector2 dir;
+
+    private void Awake()
 	{
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -59,20 +67,29 @@ public class PlayerController : MonoBehaviour
             // And then smoothing it out and applying it to the character
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, smoothing);
 
-            // Gets mouse position relative to the player
-            var mousePos = Input.mousePosition;
-            mousePos = CameraSwitch.CurrentCam.ScreenToWorldPoint(mousePos);
-            var direction = new Vector2(mousePos.x - transform.position.x, mousePos.y = transform.position.y);
+            if (InputSwitch.KeyboardInput)
+            {
+                // Gets mouse position relative to the player
+                mousePos = Input.mousePosition;
+                mousePos = CameraSwitch.CurrentCam.ScreenToWorldPoint(mousePos);
+                direction = new Vector2(mousePos.x - transform.position.x, mousePos.y = transform.position.y);
+            }
+            else if (InputSwitch.JoyStickInput)
+            {
+                // Joystick aiming
+                JoystickPos = new Vector3(Input.GetAxis("RJoy X"), Input.GetAxis("RJoy Y"));
+                dir = new Vector2(JoystickPos.x, JoystickPos.y);
+            }
 
             // If the input is moving the player right and the player is facing left
-            if ((direction.x > 0 ) && !facingRight)
+            if (((direction.x > 0 ) && !facingRight) || ((dir.x > 0) && !facingRight))
             {
                 // Flip X Scale
                 Flip();
             }
             // Otherwise if the input is moving the player left and the player is facing right
-            else if ((direction.x < 0 ) && facingRight)
-			{
+            else if (((direction.x < 0 ) && facingRight) || ((dir.x < 0) && facingRight))
+            {
 				// Flip X Scale
 				Flip();
             }
@@ -86,7 +103,7 @@ public class PlayerController : MonoBehaviour
 
         if (!grounded && !doubleJumped && jump)
         {
-            rb.velocity = Vector2.up * jumpForce; // or AddForce(new Vector2(0f, jumpForce));
+            rb.velocity = Vector2.up * jumpForce;
             doubleJumped = true;
         }
 
@@ -94,7 +111,7 @@ public class PlayerController : MonoBehaviour
 		{
             // Add a vertical force to the player.
             grounded = false;
-            rb.velocity = Vector2.up * jumpForce; // or AddForce(new Vector2(0f, jumpForce));
+            rb.velocity = Vector2.up * jumpForce;
         }
 
         if (Ladders == null)
@@ -123,5 +140,28 @@ public class PlayerController : MonoBehaviour
 		Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+    }
+
+    [ExecuteInEditMode]
+    public void OnAnimatorMove()
+    {
+        var anim = GetComponent<Animator>();
+        if (anim == null) return;
+        
+        // we implement this function to override the default root motion.
+        // this allows us to modify the positional speed before it's applied.
+        if (GetComponent<Player>().CurrentController.cutsceneDone == true)
+        {
+            anim.ApplyBuiltinRootMotion();
+            Vector3 v = (anim.deltaPosition * 20 / Time.deltaTime);
+
+            // we preserve the existing  part of the current velocity.
+            v.x = rb.velocity.x;
+            rb.velocity = v;
+        }
+        else if (GetComponent<Player>().CurrentController.cutsceneDone == false)
+        {
+            anim.applyRootMotion = false;
+        }
     }
 }

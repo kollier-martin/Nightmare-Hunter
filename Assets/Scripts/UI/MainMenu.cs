@@ -43,7 +43,7 @@ public class MainMenu : MonoBehaviour
     {
         for (float i = 0; i <= 1;)
         {
-            music.volume -= 0.1f;
+            GetComponent<AudioSource>().volume -= 0.1f;
             i += 0.1f;
         }
 

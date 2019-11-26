@@ -155,6 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DeathEffect: {fileID: 4414235328577738730, guid: 1b683720769552644aa248db514d6084,
     type: 3}
+  HealthPickUp: {fileID: 4564515589889785900, guid: 80d5133b648692048b21bbb0c51cc35d,
+    type: 3}
   targetToHit: {fileID: 7355971980563832937, guid: 270aaffc840225f4dac22036740a48e8,
     type: 3}
   MaxXPos: 0

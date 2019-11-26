@@ -11,11 +11,11 @@ public class Revolver : IGun
 
         if (name.Contains("Snub"))
         {
-            bullet.setDamage(24);
+            bullet.setDamage(14);
         }
         else
         {
-            bullet.setDamage(15);
+            bullet.setDamage(10);
         }
     }
 

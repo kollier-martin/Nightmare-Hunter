@@ -5,28 +5,57 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Playables;
+using System.Linq;
 
-public class Marlo : EnemyP, IEventSystemHandler
+public class Marlo : MonoBehaviour, IEventSystemHandler, MessageSystem
 {
+    [SerializeField]
+    private List<GameObject> Attacks = new List<GameObject>();
+
+    [SerializeField]
+    private Transform AttackSpawner;
+
     private GameController CurrenController;
     public GameObject Portal;
+    
+    private bool canAttack;
+    public float myHealth;
 
+    public GameObject PDialog;
+
+    private float attackTime;
+    private float coolDown;
+
+    [SerializeField] private SpriteRenderer SP;
+    [SerializeField] private Animator anim;
+    [SerializeField] private ParticleSystem DeathParticle;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Slider health;
+    [SerializeField] private Transform targetToHit;
+    [SerializeField] private float targetDistance;
     [SerializeField] private readonly string myName = "Marlo";
 
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
+        SP = GetComponent<SpriteRenderer>();
         CurrenController = FindObjectOfType<GameController>();
-        SetVariables(30, 300, 10, 1.0f, 1.0f);
-        setObjects();
+
+        canAttack = false;
+
+        myHealth = 300f;
+        attackTime = 1.0f;
+        coolDown = 2.0f;
 
         // Distance between entity and player
-        targetDistance = Vector3.Distance(transform.position, targetToHit.position);
+        if (targetToHit != null)
+        {
+            targetDistance = Vector3.Distance(transform.position, targetToHit.position);
+        }
     }
 
-    public override void Update()
+    public void Update()
     {
         text.text = myName;
         health.value = myHealth / 100.0f;
@@ -34,47 +63,61 @@ public class Marlo : EnemyP, IEventSystemHandler
         // If health below 1, entity is dead
         if (myHealth <= 0f)
         {
-            IAmDead();
+            StartCoroutine(IAmDead());
         }
-    }
 
-    public override void FixedUpdate()
-    {
         if (CurrenController.cutsceneDone == true)
         {
-            StartCoroutine(MarloMovement());
+            canAttack = true;
         }
+
+        Attack();
     }
 
-    IEnumerator MarloMovement()
+    IEnumerator IAmDead()
     {
-        if (transform.position.x > MaxXPos)
-        {
-            move = false;
-        }
+        GetComponent<SpriteRenderer>().enabled = false;
+        DeathParticle.Play();
 
-        if (transform.position.x < MinXPos)
-        {
-            move = true;
-        }
-
-        if (move)
-        {
-            transform.position = new Vector3(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
-            yield return new WaitForSeconds(2.5f);
-        }
-        else if (!move)
-        {
-            yield return new WaitForSeconds(2.5f);
-            transform.position = new Vector3(transform.position.x - moveSpeed * Time.deltaTime, transform.position.y, transform.position.z);
-        }
-    }
-
-    void IAmDead()
-    {
-        // Play cutscene
+        yield return new WaitForSeconds(DeathParticle.GetComponent<ParticleSystem>().main.duration);
         ExecuteEvents.Execute<GameController>(CurrenController.gameObject, null, (x, y) => x.BossIsDead());
-        Instantiate(DeathEffect, transform.position, transform.rotation);
+        Instantiate(Portal, transform.position, transform.rotation);
+        PDialog.SetActive(true);
         Destroy(gameObject);
+    }
+
+    void Attack()
+    {
+        if (attackTime > 0)
+        {
+            attackTime -= Time.deltaTime;
+        }
+
+        if (attackTime < 0)
+        {
+            attackTime = 0;
+        }
+
+        if (canAttack && attackTime == 0)
+        {
+            var rand = Random.Range(0, Attacks.Count);
+            Instantiate(Attacks[rand], AttackSpawner.transform.position, Quaternion.identity, AttackSpawner.transform);
+            attackTime = coolDown;
+        }
+    }
+
+    public void Die()
+    {
+        myHealth = 0;
+    }
+
+    public void SpawnHere(GameObject Spawn)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void TakeDamage(int damage)
+    {
+        myHealth -= damage;
     }
 }

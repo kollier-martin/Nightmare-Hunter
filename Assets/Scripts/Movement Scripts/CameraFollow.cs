@@ -20,6 +20,7 @@ public class CameraFollow : MonoBehaviour, IEventSystemHandler
 
     private void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         camAnim = GetComponent<Animator>();
     }
 

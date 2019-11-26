@@ -5,22 +5,24 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System;
 
 public class Player : MonoBehaviour, MessageSystem
 {
-    private Slider health;
+    [SerializeField] private Slider health;
     private bool dead = false;
     int i = 0;
 
     private Animator anim;
     private Rigidbody2D rb;
 
-    private GameObject GameSpawn, BossSpawn;
+    public GameObject GameSpawn, BossSpawn;
     private SpriteRenderer CanInteractSR;
     private SpriteRenderer PlayerGotSR;
     private Animator PlayerGotAnim;
-    private GameController CurrentController;
+    public GameController CurrentController;
 
+    [SerializeField] private bool onHealth;
     [SerializeField] private ParticleSystem DeathParticle;
     [SerializeField] private GameObject PlayerGot;
     [SerializeField] private GameObject CanInteract;
@@ -32,7 +34,7 @@ public class Player : MonoBehaviour, MessageSystem
 
     private bool HasKey = false;
     private float horizontal = 0f;
-    private const int speed = 15;
+    public int speed = 12;
     private bool jump = false;
 
     [SerializeField] bool climb;
@@ -41,17 +43,35 @@ public class Player : MonoBehaviour, MessageSystem
     private const float positionAdd = 0.20f;
     public static Vector2 OriginalScale;
 
-    public static float myHealth = 100.0f;
+    public float myHealth = 100.0f;
     public static string myName = "Seji";
 
     private int CurrentGunIndex = 0;
     public bool bossIsDead = false;
     private bool UnderBlock = false;
 
+    // Game Controller Instance
+    private static Player _instance = null;
+
+    public static Player Instance { get { return _instance; } }
+
     void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
     {
-        bossIsDead = false;
-        SpawnHere(GameSpawn);
+        if (scene.name == "Win Screen")
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            bossIsDead = false;
+            SpawnHere(GameSpawn);
+            SetBossSpawn();
+        }
+    }
+
+    private void SetBossSpawn()
+    {
+        BossSpawn = GameObject.FindGameObjectWithTag("Boss Spawn");
     }
 
     private void Awake()
@@ -61,7 +81,6 @@ public class Player : MonoBehaviour, MessageSystem
         CurrentController = FindObjectOfType<GameController>();
 
         GameSpawn = GameObject.FindGameObjectWithTag("Respawn");
-        BossSpawn = GameObject.FindGameObjectWithTag("Boss Spawn");
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -89,6 +108,11 @@ public class Player : MonoBehaviour, MessageSystem
 
     private void Update()
     {
+        if(BossSpawn == null)
+        {
+            SetBossSpawn();
+        }
+
         horizontal = Input.GetAxisRaw("Horizontal") * speed;
         
         if (Input.GetButtonDown("Jump"))
@@ -115,25 +139,22 @@ public class Player : MonoBehaviour, MessageSystem
             dead = false;
         }
 
+        if (myHealth <= 0)
+        {
+            dead = true;
+        }
+
+        if (myHealth > 100)
+        {
+            myHealth = 100;
+        }
+
         if (health != null)
         {
             health.value = myHealth / 100;
         }
-
-        if (HasKey == true && Input.GetButtonDown("Open") && bossIsDead == true && i < 1 && onPortal == true)
-        {
-            ItemInventory.Remove(GameObject.FindWithTag("Key"));
-            HasKey = false;
-            ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.LoadNextScene());
-            i++;
-        }
-        else if (HasKey == true && Input.GetButtonDown("Open") && bossIsDead == false && i < 1 && onPortal == true)
-        {
-            onPortal = false;
-            StartFight();
-            i++;
-        }
-
+        
+        Interactions();
         SwapGun();
         i = 0;
     }
@@ -151,7 +172,7 @@ public class Player : MonoBehaviour, MessageSystem
     {
         if(Time.timeScale == 1)
         {
-            if (GunsOwned != null)
+            if (GunsOwned.Count > 0)
             {
                 if (Input.GetKeyDown(KeyCode.E) || Input.GetAxis("DPadX") == 1)
                 {
@@ -185,9 +206,37 @@ public class Player : MonoBehaviour, MessageSystem
 
     private void Swap(int index)
     {
-        Destroy(Gun);
-        Gun = Instantiate(GunsOwned[index], new Vector3(transform.position.x + positionAdd, transform.position.y, transform.position.z), Quaternion.identity, transform.parent);
-        Gun.transform.parent = transform;
+        if (GunsOwned.Count > 0)
+        {
+            Destroy(Gun);
+            Gun = Instantiate(GunsOwned[index], new Vector3(transform.position.x + positionAdd, transform.position.y, transform.position.z), Quaternion.identity, transform.parent);
+            Gun.transform.parent = transform;
+        }
+    }
+
+    void Interactions()
+    {
+        /// Key ///
+        if (HasKey == true && Input.GetButtonDown("Open") && bossIsDead == true && i < 1 && onPortal == true)
+        {
+            ItemInventory.Remove(GameObject.FindWithTag("Key"));
+            HasKey = false;
+            ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.LoadNextScene());
+            i++;
+        }
+        else if (HasKey == true && Input.GetButtonDown("Open") && bossIsDead == false && i < 1 && onPortal == true)
+        {
+            onPortal = false;
+            StartFight();
+            i++;
+        }
+
+        /// Health /// TODO : Structure better
+        if (Input.GetButtonDown("Open") && onHealth == true)
+        {
+            myHealth += 10;
+            Destroy(GameObject.FindGameObjectWithTag("Health"));
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -211,7 +260,12 @@ public class Player : MonoBehaviour, MessageSystem
                 break;
 
             case ("Moving Platform"):
-                rb.velocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
+                transform.parent = collision.transform;
+                //rb.velocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
+                break;
+
+            case ("Enemy"):
+                myHealth -= 5;
                 break;
         }
 
@@ -226,6 +280,7 @@ public class Player : MonoBehaviour, MessageSystem
     {
         if (collision.gameObject.tag == "Moving Platform")
         {
+            transform.parent = null;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -242,10 +297,12 @@ public class Player : MonoBehaviour, MessageSystem
             case ("Crusher"):
                 UnderBlock = true;
                 break;
-
-
+                
             case ("Portal"):
                 onPortal = true;
+                break;
+            case ("Health"):
+                onHealth = true;
                 break;
         }
 
@@ -257,15 +314,23 @@ public class Player : MonoBehaviour, MessageSystem
 
     void OnTriggerExit2D(Collider2D other)
     {
-        switch (other.name)
+        switch (other.tag)
         {
             case ("Ladders"):
                 climb = false;
                 jump = true;
                 break;
 
-            case ("Falling Block"):
+            case ("Crusher"):
                 UnderBlock = false;
+                break;
+
+            case ("Portal"):
+                onPortal = false;
+                break;
+
+            case ("Health"):
+                onHealth = false;
                 break;
         }
 
@@ -355,19 +420,5 @@ public class Player : MonoBehaviour, MessageSystem
     public void DestroyMyself()
     {
         Destroy(gameObject);
-    }
-
-    [ExecuteInEditMode]
-    private void OnAnimatorMove()
-    {
-        if (anim == null)
-        {
-            return;
-        }
-
-        if (CurrentController.cutsceneDone == true)
-        {
-            anim.ApplyBuiltinRootMotion();
-        }
     }
 }

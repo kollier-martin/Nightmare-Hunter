@@ -9,7 +9,7 @@ using UnityEngine.Video;
 
 public class TimelineManager : MonoBehaviour, IEventSystemHandler
 {
-    GameController CurrentGameController;
+    [SerializeField] private GameObject CurrentGameController;
     bool finished;
 
     [SerializeField] private GameObject loadingScreen;
@@ -21,34 +21,37 @@ public class TimelineManager : MonoBehaviour, IEventSystemHandler
 
     private void Awake()
     {
-        try
+        if (CurrentGameController == null)
         {
-            CurrentGameController = FindObjectOfType<GameController>();
-        }
-        catch
-        {
-
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            CurrentGameController = GameObject.FindGameObjectWithTag("GameController");
         }
         
         cutscene = GetComponent<PlayableDirector>();
-        StartCoroutine(FadeIn());
+
+        if (SceneManager.GetActiveScene().name == "Opening Cutscene")
+        {
+            StartCoroutine(FadeIn());
+        }
     }
 
     private void Start()
     {
-        StartCoroutine(StartCutsceneWithDelay());
+        if (SceneManager.GetActiveScene().name == "Opening Cutscene")
+        {
+            StartCoroutine(StartCutsceneWithDelay());
+        }
     }
 
     private void Update()
     {
         if (finished && SceneManager.GetActiveScene().name == "Opening Cutscene")
         {
-            Destroy(player);
             loadingScreen.SetActive(true);
         }
         else if (finished)
         {
-            ExecuteEvents.Execute<GameController>(CurrentGameController.gameObject, null, (x, y) => x.CutsceneDone());
+            ExecuteEvents.Execute<GameController>(CurrentGameController.gameObject, null, (x, y) => x.CutsceneDone(finished));
         }
     }
 
@@ -56,24 +59,32 @@ public class TimelineManager : MonoBehaviour, IEventSystemHandler
     {
         image.CrossFadeAlpha(0.0f, fadeTime, false);
 
-        //// Fixes player from looking like she's floating
-        //foreach (Collider2D collider in player.GetComponents<Collider2D>())
-        //{
-        //    collider.enabled = false;
-        //}
+        if (finished && SceneManager.GetActiveScene().name == "Opening Cutscene")
+        {
+            // Fixes player from looking like she's floating
+            foreach (Collider2D collider in player.GetComponents<Collider2D>())
+            {
+                collider.enabled = false;
+            }
+        }
 
         yield return new WaitForSeconds(fadeTime);
 
-        //// Reverts the "fix"
-        //foreach (Collider2D collider in player.GetComponents<Collider2D>())
-        //{
-        //    collider.enabled = true;
-        //}
+        if (finished && SceneManager.GetActiveScene().name == "Opening Cutscene")
+        {
+            // Reverts the "fix"
+            foreach (Collider2D collider in player.GetComponents<Collider2D>())
+            {
+                collider.enabled = true;
+            }
+        }
     }
 
     IEnumerator StartCutsceneWithDelay()
     {
-        yield return new WaitForSeconds(2.0f);
+        player.speed = 0;
+        player.GetComponent<PlayerController>().jumpForce = 0f;
+        yield return new WaitForSeconds(0.0f);
         cutscene.Play();
     }
 
@@ -87,6 +98,8 @@ public class TimelineManager : MonoBehaviour, IEventSystemHandler
     {
         if (cutscene == aDirector)
         {
+            player.speed = 12;
+            player.GetComponent<PlayerController>().jumpForce = 4.5f;
             finished = true;
         }
     }

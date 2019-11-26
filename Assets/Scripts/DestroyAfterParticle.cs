@@ -7,6 +7,10 @@ public class DestroyAfterParticle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, GetComponent<ParticleSystem>().main.duration);
+        if(GetComponent<ParticleSystem>().isPlaying == true)
+        {
+
+            Destroy(gameObject, GetComponent<ParticleSystem>().main.duration);
+        }
     }
 }

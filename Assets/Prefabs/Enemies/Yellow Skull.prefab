@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 9070535998798250707}
   - component: {fileID: 9070535998798250706}
   - component: {fileID: -928221131036421370}
-  - component: {fileID: 1748501385396115426}
   m_Layer: 0
   m_Name: Yellow Skull
   m_TagString: Enemy
@@ -181,9 +180,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 103ae16716ab662449b2b5c3d1467d7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeathDuration: 0
-  animDuration: 0
   DeathEffect: {fileID: 4821496905361909636, guid: f7d08cd57597e994784ceb125194cc78,
+    type: 3}
+  HealthPickUp: {fileID: 4564515589889785900, guid: 80d5133b648692048b21bbb0c51cc35d,
     type: 3}
   targetToHit: {fileID: 7355971980563832937, guid: 270aaffc840225f4dac22036740a48e8,
     type: 3}
@@ -193,15 +192,3 @@ MonoBehaviour:
   myHealth: 0
   MinDist: 0
   MaxDist: 0
---- !u!114 &1748501385396115426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9070535998798250704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e18b03d5970997f42ab488d159fd7efb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

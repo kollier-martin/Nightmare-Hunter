@@ -10,8 +10,9 @@ abstract public class EnemyP : MonoBehaviour, MessageSystem
     
     private float lastHitDone;
 
-    private Animator anim;
+    protected Animator anim;
     public GameObject DeathEffect;
+    public GameObject HealthPickUp;
 
     public Transform targetToHit;
     protected float targetDistance;
@@ -38,6 +39,12 @@ abstract public class EnemyP : MonoBehaviour, MessageSystem
         {
             // Activate death animation then Destroy object
             Instantiate(DeathEffect, transform.position, Quaternion.identity);
+
+            if (Random.Range(0, 4) == 1)
+            {
+                Instantiate(HealthPickUp, transform.position, Quaternion.identity);
+            }
+
             Destroy(gameObject);
         }
     }
@@ -86,7 +93,11 @@ abstract public class EnemyP : MonoBehaviour, MessageSystem
     protected void setObjects()
     {
         anim = GetComponent<Animator>();
-        targetDistance = Vector3.Distance(transform.position, targetToHit.position);
+
+        if (targetToHit != null)
+        {
+            targetDistance = Vector3.Distance(transform.position, targetToHit.position);
+        }
     }
     protected void SetVariables(int damage, int myHealth, int speed, float attackRange, float attackDelay)
     {
