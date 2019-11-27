@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 6455168854396986034}
   - component: {fileID: 8331170072815026112}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,8 +135,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 122, y: -82}
-  m_SizeDelta: {x: 331.1, y: 90.1}
+  m_AnchoredPosition: {x: 2, y: -0}
+  m_SizeDelta: {x: 206.3, y: 56.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8331170072815026112
 MonoBehaviour:
@@ -449,7 +449,7 @@ GameObject:
   - component: {fileID: 9218653052273515656}
   - component: {fileID: 1740176814838274609}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -760,6 +760,7 @@ MonoBehaviour:
   GameSpawn: {fileID: 0}
   BossSpawn: {fileID: 0}
   CurrentController: {fileID: 0}
+  onHealth: 0
   DeathParticle: {fileID: 4015140001664898648}
   PlayerGot: {fileID: 4869217059723933754}
   CanInteract: {fileID: 152768551}

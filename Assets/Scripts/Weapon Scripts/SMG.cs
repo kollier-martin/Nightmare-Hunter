@@ -7,7 +7,7 @@ public class SMG : IGun
     // Start is called before the first frame update
     void Start()
     {
-        shotDelay = 0f;
+        shotDelay = 0.4f;
 
         if (name.Contains("Upgraded"))
         {

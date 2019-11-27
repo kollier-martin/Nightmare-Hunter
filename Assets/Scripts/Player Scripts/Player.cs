@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using System;
+using System.Linq;
 
 public class Player : MonoBehaviour, MessageSystem
 {
@@ -27,8 +28,8 @@ public class Player : MonoBehaviour, MessageSystem
     [SerializeField] private GameObject PlayerGot;
     [SerializeField] private GameObject CanInteract;
     [SerializeField] private GameObject Gun;
-    [SerializeField] private List<GameObject> GunsOwned;
-    [SerializeField] private List<GameObject> ItemInventory;
+    [SerializeField] private List<GameObject> GunsOwned = new List<GameObject>();
+    [SerializeField] private List<GameObject> ItemInventory = new List<GameObject>();
 
     public PlayerController myController;
 
@@ -414,7 +415,13 @@ public class Player : MonoBehaviour, MessageSystem
     public void SendData()
     {
         // Send current data to GameController
-        ExecuteEvents.Execute<GameController>(CurrentController.gameObject, null, (x, y) => x.ProcessPlayerData(transform.position, GunsOwned, ItemInventory, SceneManager.GetActiveScene()));
+        ExecuteEvents.Execute<GameController>(GameObject.FindGameObjectWithTag("GameController").gameObject, null, (x, y) => x.ProcessPlayerData(GunsOwned, ItemInventory, SceneManager.GetActiveScene().buildIndex));
+    }
+
+    public void UpdateData(List<GameObject> GunsOwned, List<GameObject> Inventory)
+    {
+        this.GunsOwned = GunsOwned;
+        ItemInventory = Inventory;
     }
 
     public void DestroyMyself()

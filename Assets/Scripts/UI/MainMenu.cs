@@ -15,23 +15,27 @@ public class MainMenu : MonoBehaviour
     public Slider slider;
     public Text progressText;
     public AudioSource music;
+    GameController controller;
 
     [SerializeField] private Image image = null;
+
+    private void Awake()
+    {
+        controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
+        controller.gameState = State.MENU;
+    }
 
     public void NewGame()
     {
         StartCoroutine(Fade());
+        controller.gameState = State.PLAYING;
     }
 
     public void Continue()
     {
-        /* If there is load data saved on the user's drive this button will be enabled
-         * 
-         * StartCoroutine(LoadQuietly(the scene with their data saved));
-         * 
-         */
-
-        throw new NotImplementedException("Coming Soon :)");
+        controller.Load();
+        controller.gameState = State.PLAYING;
     }
 
     public void Quit()

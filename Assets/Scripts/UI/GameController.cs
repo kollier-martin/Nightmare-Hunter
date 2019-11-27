@@ -6,11 +6,12 @@ using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 
-public enum State { PAUSED, PLAYING, GAMEOVER, CONSOLE }
+public enum State { PAUSED, PLAYING, GAMEOVER, CONSOLE, MENU }
 public class GameController : MonoBehaviour, IEventSystemHandler
 {
     // Handles Pause, Play, Settings, Saving, Loading
@@ -37,7 +38,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     [SerializeField] private GameObject Spawn = null;
     [SerializeField] private Player player = null;
 
-    private State gameState;
+    public State gameState;
     private const float fadeTime = 1.0f;
 
     // Cheat Dictionary and Input
@@ -48,14 +49,14 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     // Game Data and Scene Count
     public static GameData currentData;
-    protected List<Scene> scenes;
-
-    // Binary Formatter Serializes the Game Data
-    BinaryFormatter bf;
+    private List<Scene> scenes;
 
     // Game Controller Instance
     private static GameController _instance = null;
     public bool cutsceneDone;
+
+    Action LoadFromMenu;
+    private string SavePath;
 
     public static GameController Instance { get { return _instance; } }
 
@@ -63,7 +64,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     {
         try
         {
-            bf = new BinaryFormatter();
+            SavePath = Application.persistentDataPath + "/SavedGame.sav";
             World = GameObject.FindWithTag("World");
             Spawn = GameObject.FindWithTag("Respawn");
             player = FindObjectOfType<Player>();
@@ -80,7 +81,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
             CameraSwitch.CurrentCam = mainCam.GetComponent<Camera>();
 
             CheatDict.Add("kill", KillPlayer);
-            CheatDict.Add("skip scene", LoadNextScene);
+            CheatDict.Add("skip", LoadSceneNoFade);
             CheatDict.Add("help", Help);
 
             if (SceneManager.GetActiveScene().buildIndex > 1)
@@ -107,10 +108,16 @@ public class GameController : MonoBehaviour, IEventSystemHandler
             Start();
         }
     }
+
+    void OnGameStateLoad()
+    {
+        ExecuteEvents.Execute<Player>(player.gameObject, null, (x, y) => x.UpdateData(currentData.GunsOwned, currentData.ItemInventory));
+    }
     
     void Awake()
     {
         SceneManager.sceneLoaded += this.OnLoadCallback;
+        LoadFromMenu += this.OnGameStateLoad;
 
         if (_instance == null)
         {
@@ -148,11 +155,14 @@ public class GameController : MonoBehaviour, IEventSystemHandler
             // Game State Handling
             switch (gameState)
             {
+                case State.MENU:
+                    break;
+
                 case State.PAUSED:
                     if (Input.GetButtonDown("Cancel"))
                     {
                         PlayGame();
-                        gameState = State.PLAYING;
+                        
                     }
                     break;
                 case State.PLAYING:
@@ -160,7 +170,6 @@ public class GameController : MonoBehaviour, IEventSystemHandler
                     if (Input.GetButtonDown("Cancel"))
                     {
                         PauseGame();
-                        gameState = State.PAUSED;
                     }
 
                     // If player is dead
@@ -197,12 +206,14 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     {
         Time.timeScale = 0;
         PauseMenu.SetActive(true);
+        gameState = State.PAUSED;
     }
 
     public void PlayGame()
     {
         Time.timeScale = 1;
         PauseMenu.SetActive(false);
+        gameState = State.PLAYING;
     }
 
     public void GameOver()
@@ -217,6 +228,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     public void MainMenu()
     {
         SceneManager.LoadScene(0);
+        gameState = State.MENU;
     }
 
     public void ContinueGame()
@@ -273,6 +285,11 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.Die());
     }
 
+    public void LoadSceneNoFade()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
     public void LoadNextScene()
     {
         StartCoroutine(LoadQuietly(SceneManager.GetActiveScene().buildIndex + 1));
@@ -291,8 +308,8 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         {
             float progress = Mathf.Clamp01(operation.progress / .9f);
 
-            slider.value = progress;
-            progressText.text = progress * 100f + "%";
+            slider.value = (int) progress;
+            progressText.text = (int) progress * 100f + "%";
             yield return null;
         }
     }
@@ -319,7 +336,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
                 case ("kill"):
                     logText.text += key.ToString() + " : Kills the player\n";
                     break;
-                case ("skip scene"):
+                case ("skip"):
                     logText.text += key.ToString() + " : Loads the next scene\n";
                     break;
                 case ("help"):
@@ -345,9 +362,8 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         CheatDict[str]();
     }
 
-    public void ProcessPlayerData(Vector3 location, List<GameObject> GunsOwned, List<GameObject> Inventory, Scene currentScene)
+    public void ProcessPlayerData(List<GameObject> GunsOwned, List<GameObject> Inventory, int currentScene)
     {
-        currentData.playerLocation = location;
         currentData.GunsOwned = GunsOwned;
         currentData.ItemInventory = Inventory;
         currentData.scene = currentScene;
@@ -362,31 +378,31 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     public void Save()
     {
-        // Filestream creates a file using arguments
-        // FileStream file = File.Create a file in the player's game destination
-        FileStream file = File.Create(Application.persistentDataPath + "/SavedGame.sav");
-
-        // Encode the data
-        bf.Serialize(file, currentData);
-
-        // Close Stream
-        file.Close();
+        // Using Json Rather than Binary Formatter
+        string json = JsonUtility.ToJson(currentData, true);
+        File.WriteAllText(SavePath, json);
     }
 
-    public void Load()
+    public GameData Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/SavedGame.sav"))
+        if (File.Exists(SavePath))
         {
-            FileStream file = File.Open(Application.persistentDataPath + "/SavedGame.sav", FileMode.Open);
+            string contents = File.ReadAllText(SavePath);
+
+            if (string.IsNullOrEmpty(contents))
+            {
+                Debug.Log("This save file is empty.");
+            }
 
             // Populates current game data
-            currentData = (GameData)bf.Deserialize(file);
-
-            // Close Stream
-            file.Close();
+            return JsonUtility.FromJson<GameData>(contents);
+        }
+        else if (!File.Exists(SavePath))
+        {
+            throw new NullPathException("Game data does not exist.");
         }
 
-        StartCoroutine(LoadQuietly(currentData.scene.buildIndex));
+        return new GameData();
     }
 
     [Serializable]
@@ -394,19 +410,26 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     {
         public float playerHealth;
         public GameObject CurrentWorldData;
-        public Scene scene;
+        public int scene;
         public List<GameObject> GunsOwned;
         public List<GameObject> ItemInventory;
-        public Vector3 playerLocation;
 
         public GameData()
         {
             playerHealth = 100.0f;
             CurrentWorldData = null;
-            scene = SceneManager.GetActiveScene();
-            GunsOwned = null;
-            ItemInventory = null;
-            playerLocation = Vector2.zero;
+            scene = SceneManager.GetActiveScene().buildIndex;
+            GunsOwned = new List<GameObject>();
+            ItemInventory = new List<GameObject>();
+        }
+    }
+
+    /// Custom Exception
+    public class NullPathException : Exception
+    {
+        public NullPathException(string message)
+        {
+            Debug.Log(message);
         }
     }
 }

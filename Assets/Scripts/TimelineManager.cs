@@ -96,7 +96,7 @@ public class TimelineManager : MonoBehaviour, IEventSystemHandler
 
     void OnPlayableDirectorStopped(PlayableDirector aDirector)
     {
-        if (cutscene == aDirector)
+        if (cutscene == aDirector && player != null)
         {
             player.speed = 12;
             player.GetComponent<PlayerController>().jumpForce = 4.5f;
