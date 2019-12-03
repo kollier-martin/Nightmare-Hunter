@@ -25,6 +25,7 @@ TagManager:
   - BossSpawn
   - Boss Spawn
   - Health
+  - Container
   layers:
   - Default
   - TransparentFX

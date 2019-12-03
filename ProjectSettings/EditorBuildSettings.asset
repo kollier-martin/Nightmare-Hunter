@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Win Screen.unity
     guid: 78772df419f66944e8700e2452fc6f63
   - enabled: 0
-    path: Assets/Scenes/Level 1 Prototype.unity
+    path: Assets/Scenes/Level 1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
     path: Assets/Scenes/Level 2 Prototype.unity
