@@ -38,6 +38,9 @@ public class GameController : MonoBehaviour, IEventSystemHandler
     [SerializeField] private GameObject Spawn = null;
     [SerializeField] private Player player = null;
 
+    private List<GameObject> SpawnPoints = new List<GameObject>();
+    private List<Camera> CamerasInScene = new List<Camera>();
+
     public State gameState;
     private const float fadeTime = 1.0f;
 
@@ -60,69 +63,18 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     public static GameController Instance { get { return _instance; } }
 
-    private void Start()
-    {
-        try
-        {
-            SavePath = Application.persistentDataPath + "/SavedGame.sav";
-            World = GameObject.FindWithTag("World");
-            Spawn = GameObject.FindWithTag("Respawn");
-            player = FindObjectOfType<Player>();
-            bossCam = GameObject.FindGameObjectWithTag("BossCamera");
-            mainCam = GameObject.FindGameObjectWithTag("MainCamera");
-            BossHandler = GameObject.FindGameObjectWithTag("Boss Handler");
-            Timeline = GameObject.FindGameObjectWithTag("Timeline");
-
-            bossCam.SetActive(false);
-            Timeline.SetActive(false);
-            
-            music = World.GetComponent<AudioSource>();
-
-            CameraSwitch.CurrentCam = mainCam.GetComponent<Camera>();
-
-            CheatDict.Add("kill", KillPlayer);
-            CheatDict.Add("skip", LoadSceneNoFade);
-            CheatDict.Add("help", Help);
-
-            if (SceneManager.GetActiveScene().buildIndex > 1)
-            {
-                ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.SpawnHere(Spawn));
-            }
-
-            DontDestroyOnLoad(gameObject);
-        }
-        catch
-        {
-
-        }
-    }
-
-    void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
-    {
-        if (scene.name == "Win Screen")
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Start();
-        }
-    }
-
-    void OnGameStateLoad()
-    {
-        ExecuteEvents.Execute<Player>(player.gameObject, null, (x, y) => x.UpdateData(currentData.GunsOwned, currentData.ItemInventory));
-    }
-    
     void Awake()
     {
+        // Event handlers for specific scenes when they load
         SceneManager.sceneLoaded += this.OnLoadCallback;
         LoadFromMenu += this.OnGameStateLoad;
 
+        // if creates a GameController instance and populates the GameController 'scenes' variable with all valid scenes and it loads up a new GameData (used for saves)
+        // else indicates that the GameController be destroyed if there is another already in the scene
         if (_instance == null)
         {
             gameState = State.PLAYING;
-            
+
             scenes = new List<Scene>();
 
             for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
@@ -141,10 +93,116 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         }
     }
 
+    private void Start()
+    {
+        try
+        {
+            // populates the 'Spawns' variable with all possible spawn points in the scene 
+            var Spawns = GameObject.FindGameObjectsWithTag("SpawnPoint");
+            foreach (GameObject spawn in Spawns)
+            {
+                SpawnPoints.Add(spawn);
+            }
+
+            // populates the 'Cameras' variable with all cameras in the scene
+            var Cameras = FindObjectsOfType<Camera>();
+            
+            // ERROR HERE MULTIPLE MAIN CAMERAS POPULATING. FIXME
+            //Debug.Log(Cameras.);
+            foreach (Camera cam in Cameras)
+            {
+                CamerasInScene.Add(cam);
+            }
+
+            // indicates where a game save will be located
+            SavePath = Application.persistentDataPath + "/SavedGame.sav";
+
+            // get world variable for current world
+            World = GameObject.FindWithTag("World");
+
+            // get player spawn point
+            Spawn = GameObject.FindWithTag("Respawn");
+
+            // get player's object data
+            player = FindObjectOfType<Player>();
+
+            // for all cameras in the scene, set them to their correct values
+            for (int i = 0; i < CamerasInScene.Count; i++)
+            {
+                if (CamerasInScene[i].tag == "BossCamera")
+                {
+                    bossCam = CamerasInScene[i].gameObject;
+                    break;
+                }
+
+                if (CamerasInScene[i].tag == "MainCamera")
+                {
+                    mainCam = CamerasInScene[i].gameObject;
+                    break;
+                }
+            }
+
+            // get object values for Timeline and BossHandler
+            BossHandler = GameObject.FindGameObjectWithTag("Boss Handler");
+            Timeline = GameObject.FindGameObjectWithTag("Timeline");
+
+            // set bossCam and Timeline inactive, for use later
+            bossCam.SetActive(false);
+            Timeline.SetActive(false);
+            
+            // get current music from the world
+            music = World.GetComponent<AudioSource>();
+
+            // CameraSwitch is a class that handles which camera is current
+            CameraSwitch.CurrentCam = mainCam.GetComponent<Camera>();
+
+            // commands testing, incomplete
+            CheatDict.Add("kill", KillPlayer);
+            CheatDict.Add("skip", LoadSceneNoFade);
+            CheatDict.Add("help", Help);
+
+            // if the Scene is not the main menu, spawn the player on the set spawn point
+            if (SceneManager.GetActiveScene().buildIndex > 1)
+            {
+                ExecuteEvents.Execute<MessageSystem>(player.gameObject, null, (x, y) => x.SpawnHere(Spawn));
+            }
+
+            DontDestroyOnLoad(gameObject);
+        }
+        catch
+        {
+            // Unhandled exception catch || FIXME
+        }
+    }
+
+    void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
+    {
+        // OnLoadCallback is ran when a scene is switched to see if that scene matches the name
+        // if Win Screen is loaded, delete Game Controller ; else clear all Cameras and SpawnPoints then run start again to redo all variable populations
+        if (scene.name == "Win Screen")
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            CamerasInScene.Clear();
+            SpawnPoints.Clear();
+            Start();
+        }
+    }
+
+    // Used in the load game function. populates the player with the saved player data
+    // incomplete function
+    void OnGameStateLoad()
+    {
+        ExecuteEvents.Execute<Player>(player.gameObject, null, (x, y) => x.UpdateData(currentData.GunsOwned, currentData.ItemInventory));
+    }
+    
     void Update()
     {
         if (SceneManager.GetActiveScene().buildIndex > 1)
         {
+            // if the boss cutscene is done, then start fight music and set cutscene done to false again
             if (cutsceneDone == true)
             {
                 music.Stop();
@@ -178,6 +236,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
                         gameState = State.GAMEOVER;
                     }
 
+                    // For console integration.. eventually
                     if (Input.GetKeyDown(KeyCode.BackQuote))
                     {
                         Time.timeScale = 0;
@@ -191,6 +250,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
                     GameOver();
                     break;
                 case State.CONSOLE:
+                    // Close console and resume game
                     if (Input.GetKeyDown(KeyCode.BackQuote))
                     {
                         Time.timeScale = 1;
@@ -233,6 +293,8 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     public void ContinueGame()
     {
+        // On death, pressing continue runs this function
+        // I'm sure this function does not reset the scene, so that will be fixed
         World.SetActive(true);
         DeathScreen.SetActive(false);
 
@@ -247,6 +309,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     public void InstantiateMarlo()
     {
+        // Spawn Boss. I want a better way to spawn bosses, but this is just a test run for now
         player.speed = 0;
         player.GetComponent<PlayerController>().jumpForce = 0f;
         ExecuteEvents.Execute<Cave>(World.gameObject, null, (x, y) => x.TurnDownMusic());
@@ -297,6 +360,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     IEnumerator LoadQuietly(int sceneIndex)
     {
+        // Loading Screen
         FadeIn();
         yield return new WaitForSeconds(fadeTime);
 
@@ -325,6 +389,8 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         image.CrossFadeAlpha(1.0f, fadeTime, false);
     }
 
+    #region Commands Console
+    // Uses a dictionary to attach commands to a text input within the command console
     public void Help()
     {
         logText.text = "Commands:\n";
@@ -361,6 +427,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
         CheatDict[str]();
     }
+    #endregion
 
     public void ProcessPlayerData(List<GameObject> GunsOwned, List<GameObject> Inventory, int currentScene)
     {
@@ -385,6 +452,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
 
     public GameData Load()
     {
+        // Looks functional. Scared to test if it works lol
         if (File.Exists(SavePath))
         {
             string contents = File.ReadAllText(SavePath);
@@ -424,7 +492,7 @@ public class GameController : MonoBehaviour, IEventSystemHandler
         }
     }
 
-    /// Custom Exception
+    /// Custom Exception for Loading and all that Jazz.
     public class NullPathException : Exception
     {
         public NullPathException(string message)

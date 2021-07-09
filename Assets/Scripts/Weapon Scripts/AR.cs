@@ -7,7 +7,7 @@ public class AR : IGun
     // Start is called before the first frame update
     void Start()
     {
-        shotDelay = 2.7f;
+        shotDelay = 1.909f;
         if(name.Contains("Upgraded"))
         {
             bullet.setDamage(22);

@@ -8,7 +8,7 @@ public class Pistol : IGun
     void Start()
     {
         shotDelay = 0.3f;
-        bullet.setDamage(5);
+        bullet.setDamage(7);
     }
 
     // Update is called once per frame

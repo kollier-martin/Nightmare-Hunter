@@ -51,9 +51,8 @@ public class Player : MonoBehaviour, MessageSystem
     public bool bossIsDead = false;
     private bool UnderBlock = false;
 
-    // Game Controller Instance
+    // Player Controller Instance
     private static Player _instance = null;
-
     public static Player Instance { get { return _instance; } }
 
     void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
@@ -72,6 +71,7 @@ public class Player : MonoBehaviour, MessageSystem
 
     private void SetBossSpawn()
     {
+        // Spawn location for boss room fight
         BossSpawn = GameObject.FindGameObjectWithTag("Boss Spawn");
     }
 
@@ -209,6 +209,7 @@ public class Player : MonoBehaviour, MessageSystem
     {
         if (GunsOwned.Count > 0)
         {
+            // Change things around here so the gun spawns whichever position the player is looking
             Destroy(Gun);
             Gun = Instantiate(GunsOwned[index], new Vector3(transform.position.x + positionAdd, transform.position.y, transform.position.z), Quaternion.identity, transform.parent);
             Gun.transform.parent = transform;

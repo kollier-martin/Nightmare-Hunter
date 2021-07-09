@@ -23,6 +23,7 @@ abstract public class IGun : MonoBehaviour
         {
             if (Input.GetButtonDown("Fire1") && (transform.parent.localScale.x > 0) && Time.time > nextFire || Input.GetAxis("Fire1") > 0 && (transform.parent.localScale.x > 0) && Time.time > nextFire)
             {
+                // If player is aiming right the bullet will go right
                 nextFire = Time.time + shotDelay;
                 bullet.setSpeedX(bulletSpeed);
 
@@ -31,6 +32,7 @@ abstract public class IGun : MonoBehaviour
             }
             else if (Input.GetButtonDown("Fire1") && (transform.parent.localScale.x < 0) && Time.time > nextFire || Input.GetAxis("Fire1") > 0 && (transform.parent.localScale.x < 0) && Time.time > nextFire)
             {
+                // If player is aiming left the bullet will go left (speed * -1 == left direction)
                 nextFire = Time.time + shotDelay;
                 bullet.setSpeedX(bulletSpeed * -1);
 

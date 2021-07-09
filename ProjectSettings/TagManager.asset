@@ -22,10 +22,10 @@ TagManager:
   - BossCamera
   - Boss Handler
   - Timeline
-  - BossSpawn
   - Boss Spawn
   - Health
   - Container
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

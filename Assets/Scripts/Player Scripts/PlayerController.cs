@@ -52,7 +52,9 @@ public class PlayerController : MonoBehaviour
 		for (int i = 0; i < colliders.Length; i++)
 		{
 			if (colliders[i].gameObject != gameObject)
+            {
                 grounded = true;
+            }
 		}
 	}
     

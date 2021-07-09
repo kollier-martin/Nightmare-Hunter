@@ -26,6 +26,10 @@ public class AttackCollider : MonoBehaviour, IEventSystemHandler
     // Update is called once per frame
     void Update()
     {
+        /* 
+        TEST: transform.position += (transform.right - targetToHit.transform.position) * 14f * Time.deltaTime;
+        */
+
         // Move the projectile forward towards the player's last known direction;
         transform.position += transform.right * 14f * Time.deltaTime;
     }

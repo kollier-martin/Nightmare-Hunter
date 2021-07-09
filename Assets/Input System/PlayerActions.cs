@@ -1,14 +1,15 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/PlayerActions.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Input System/PlayerActions.inputactions'
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class PlayerActions : IInputActionCollection
+public class @PlayerActions : IInputActionCollection, IDisposable
 {
-    private InputActionAsset asset;
-    public PlayerActions()
+    public InputActionAsset asset { get; }
+    public @PlayerActions()
     {
         asset = InputActionAsset.FromJson(@"{
     ""name"": ""PlayerActions"",
@@ -132,7 +133,7 @@ public class PlayerActions : IInputActionCollection
         m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
     }
 
-    ~PlayerActions()
+    public void Dispose()
     {
         UnityEngine.Object.Destroy(asset);
     }
@@ -184,8 +185,8 @@ public class PlayerActions : IInputActionCollection
     private readonly InputAction m_Gameplay_Shoot;
     public struct GameplayActions
     {
-        private PlayerActions m_Wrapper;
-        public GameplayActions(PlayerActions wrapper) { m_Wrapper = wrapper; }
+        private @PlayerActions m_Wrapper;
+        public GameplayActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @SwitchWeapons => m_Wrapper.m_Gameplay_SwitchWeapons;
         public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
         public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
@@ -198,28 +199,28 @@ public class PlayerActions : IInputActionCollection
         {
             if (m_Wrapper.m_GameplayActionsCallbackInterface != null)
             {
-                SwitchWeapons.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchWeapons;
-                SwitchWeapons.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchWeapons;
-                SwitchWeapons.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchWeapons;
-                Aim.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
-                Aim.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
-                Aim.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
-                Shoot.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
-                Shoot.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
-                Shoot.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
+                @SwitchWeapons.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchWeapons;
+                @SwitchWeapons.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchWeapons;
+                @SwitchWeapons.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSwitchWeapons;
+                @Aim.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
+                @Shoot.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
             {
-                SwitchWeapons.started += instance.OnSwitchWeapons;
-                SwitchWeapons.performed += instance.OnSwitchWeapons;
-                SwitchWeapons.canceled += instance.OnSwitchWeapons;
-                Aim.started += instance.OnAim;
-                Aim.performed += instance.OnAim;
-                Aim.canceled += instance.OnAim;
-                Shoot.started += instance.OnShoot;
-                Shoot.performed += instance.OnShoot;
-                Shoot.canceled += instance.OnShoot;
+                @SwitchWeapons.started += instance.OnSwitchWeapons;
+                @SwitchWeapons.performed += instance.OnSwitchWeapons;
+                @SwitchWeapons.canceled += instance.OnSwitchWeapons;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
             }
         }
     }
